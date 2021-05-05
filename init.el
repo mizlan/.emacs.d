@@ -61,3 +61,6 @@
 
 (use-package cider
   :ensure t)
+
+(use-package projectile
+  :ensure t)
