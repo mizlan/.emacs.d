@@ -64,3 +64,6 @@
 
 (use-package projectile
   :ensure t)
+
+(use-package haskell-mode
+  :ensure t)
