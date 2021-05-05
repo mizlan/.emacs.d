@@ -67,3 +67,6 @@
 
 (use-package haskell-mode
   :ensure t)
+
+(use-package janet-mode
+  :ensure t)
