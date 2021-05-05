@@ -11,7 +11,7 @@
 (setq recentf-max-menu-items 25)
 (setq recentf-max-saved-items 25)
 
-(setq custom-file "~/.emacs.d/custom.el")
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
