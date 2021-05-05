@@ -13,60 +13,69 @@
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
-(require 'package)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+;; (require 'package)
+;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
-(package-initialize)
+;; (package-initialize)
 
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+;; (unless (package-installed-p 'use-package)
+;;   (package-refresh-contents)
+;;   (package-install 'use-package))
 
-(eval-when-compile
-  (require 'use-package))
+;; (eval-when-compile
+;;   (require 'use-package))
 
-(use-package modus-themes
-  :ensure
-  :init
-  (setq modus-themes-bold-constructs nil
-        modus-themes-region 'no-extend
-        modus-themes-completions 'opinionated)
-  (modus-themes-load-themes)
-  :config
-  (modus-themes-load-operandi))
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-(use-package which-key
-  :ensure t
-  :init
-  (setq which-key-show-early-on-C-h t)
-  :config
-  (which-key-mode))
+(straight-use-package 'ivy)
+(straight-use-package 'counsel)
 
-(use-package ivy
-  :ensure t
-  :config
-  (ivy-mode))
+(ivy-mode)
+(counsel-mode)
+(global-set-key (kbd "C-c r") 'counsel-recentf)
 
-(use-package counsel
-  :ensure t
-  :config
-  (counsel-mode)
-  :bind ("C-x C-r" . counsel-recentf))
+;; (use-package modus-themes
+;;   :ensure
+;;   :init
+;;   (setq modus-themes-bold-constructs nil
+;;         modus-themes-region 'no-extend
+;;         modus-themes-completions 'opinionated)
+;;   (modus-themes-load-themes)
+;;   :config
+;;   (modus-themes-load-operandi))
 
-(use-package magit
-  :ensure t)
+;; (use-package which-key
+;;   :ensure t
+;;   :init
+;;   (setq which-key-show-early-on-C-h t)
+;;   :config
+;;   (which-key-mode))
 
-(use-package clojure-mode
-  :ensure t)
+;; (use-package magit
+;;   :ensure t)
 
-(use-package cider
-  :ensure t)
+;; (use-package clojure-mode
+;;   :ensure t)
 
-(use-package projectile
-  :ensure t)
+;; (use-package cider
+;;   :ensure t)
 
-(use-package haskell-mode
-  :ensure t)
+;; (use-package projectile
+;;   :ensure t)
 
-(use-package janet-mode
-  :ensure t)
+;; (use-package haskell-mode
+;;   :ensure t)
+
+;; (use-package janet-mode
+;;   :ensure t)
