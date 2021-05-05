@@ -5,7 +5,7 @@
 (setq inhibit-startup-screen t)
 (tool-bar-mode -1)
 
-(add-to-list 'default-frame-alist '(font . "Roboto Mono-14"))
+(add-to-list 'default-frame-alist '(font . "Roboto Mono-14:light"))
 
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
