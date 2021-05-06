@@ -40,4 +40,5 @@
 
 (ivy-mode)
 (counsel-mode)
+(which-key-mode)
 (global-set-key (kbd "C-c r") 'counsel-recentf)
