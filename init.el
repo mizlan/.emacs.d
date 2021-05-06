@@ -38,10 +38,16 @@
 (straight-use-package 'projectile)
 (straight-use-package 'janet-mode)
 (straight-use-package 'keycast)
+(straight-use-package 'diminish)
 
 (ivy-mode)
 (counsel-mode)
 (which-key-mode)
+
+(diminish 'ivy-mode)
+(diminish 'which-key-mode)
+(diminish 'counsel-mode)
+
 (global-set-key (kbd "C-c r") 'counsel-recentf)
 
 (set-face-attribute 'region nil :background "#bb9")
