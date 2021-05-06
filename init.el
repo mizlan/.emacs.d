@@ -42,3 +42,5 @@
 (counsel-mode)
 (which-key-mode)
 (global-set-key (kbd "C-c r") 'counsel-recentf)
+
+(set-face-attribute 'region nil :background "#bb9")
