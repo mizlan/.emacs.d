@@ -5,6 +5,8 @@
 (setq inhibit-startup-screen t)
 (tool-bar-mode -1)
 
+(load-theme 'tango)
+
 (add-to-list 'default-frame-alist '(font . "Roboto Mono-14:light"))
 
 (recentf-mode 1)
