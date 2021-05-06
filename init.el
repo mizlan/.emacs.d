@@ -37,6 +37,7 @@
 (straight-use-package 'cider)
 (straight-use-package 'projectile)
 (straight-use-package 'janet-mode)
+(straight-use-package 'keycast)
 
 (ivy-mode)
 (counsel-mode)
