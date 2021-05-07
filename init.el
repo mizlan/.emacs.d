@@ -14,6 +14,11 @@
 (setq recentf-max-menu-items 25)
 (setq recentf-max-saved-items 25)
 
+(defun edit-config ()
+  (interactive)
+  (find-file (expand-file-name "init.el" user-emacs-directory)))
+
+(global-set-key (kbd "C-c c") 'edit-config)
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
 (defvar bootstrap-version)
