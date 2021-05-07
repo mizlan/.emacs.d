@@ -64,6 +64,9 @@
 
 (set-face-attribute 'region nil :background "#bb9")
 
+(add-hook 'haskell-mode-hook #'lsp)
+(add-hook 'haskell-literate-mode-hook #'lsp)
+
 ;;; Weird workaround
 
 (defvar original-font-size nil)
