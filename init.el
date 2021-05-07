@@ -39,6 +39,8 @@
 (straight-use-package 'janet-mode)
 (straight-use-package 'keycast)
 (straight-use-package 'diminish)
+(straight-use-package 'company-mode)
+(straight-use-package 'flycheck)
 
 (ivy-mode)
 (counsel-mode)
