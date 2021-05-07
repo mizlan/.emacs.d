@@ -53,3 +53,32 @@
 (global-set-key (kbd "C-c r") 'counsel-recentf)
 
 (set-face-attribute 'region nil :background "#bb9")
+
+;;; Weird workaround
+
+(defvar original-font-size nil)
+
+(defun adjust-font-size (delta)
+  (let* ((old-size (face-attribute 'default :height))
+         (new-size (max (max delta (- delta)) (min 300 (+ delta old-size)))))
+    (setq original-font-size (or original-font-size old-size))
+    (set-face-attribute 'default nil :height new-size)
+    (message "Font size set to %d (was %d)" (face-attribute 'default :height) old-size)))
+
+(defun zoom-in ()
+  (interactive)
+  (adjust-font-size +10))
+
+(defun zoom-out ()
+  (interactive)
+  (adjust-font-size -10))
+
+(defun zoom-reset ()
+  (interactive)
+  (when original-font-size
+    (set-face-attribute 'default nil :height original-font-size)))
+
+;; Zoom settings
+(global-set-key (kbd "C-=") 'zoom-in)
+(global-set-key (kbd "C--") 'zoom-out)
+
