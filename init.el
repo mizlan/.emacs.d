@@ -8,6 +8,7 @@
 (load-theme 'tango)
 
 (add-to-list 'default-frame-alist '(font . "Roboto Mono-14:light"))
+(add-to-list 'exec-path "/Users/michaellan/.ghcup/bin")
 
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
