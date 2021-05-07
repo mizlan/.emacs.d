@@ -53,6 +53,8 @@
 (diminish 'which-key-mode)
 (diminish 'counsel-mode)
 
+(setq lsp-keymap-prefix "C-c l")
+
 (global-set-key (kbd "C-c r") 'counsel-recentf)
 
 (set-face-attribute 'region nil :background "#bb9")
