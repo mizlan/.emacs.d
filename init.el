@@ -38,9 +38,11 @@
 (straight-use-package 'diminish)
 (straight-use-package 'company-mode)
 (straight-use-package 'flycheck)
+(straight-use-package 'lsp-mode)
 (straight-use-package 'clojure-mode)
 (straight-use-package 'cider)
 (straight-use-package 'haskell-mode)
+(straight-use-package 'lsp-haskell)
 
 (ivy-mode)
 (counsel-mode)
