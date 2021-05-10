@@ -55,14 +55,20 @@
 (straight-use-package 'cider)
 (straight-use-package 'haskell-mode)
 (straight-use-package 'lsp-haskell)
+(straight-use-package 'typescript-mode)
+(straight-use-package 'janet-mode)
 
 (ivy-mode)
 (counsel-mode)
 (which-key-mode)
+(global-company-mode)
+(projectile-mode)
 
 (diminish 'ivy-mode)
-(diminish 'which-key-mode)
 (diminish 'counsel-mode)
+(diminish 'which-key-mode)
+(diminish 'company-mode)
+(diminish 'projectile-mode)
 
 (setq lsp-keymap-prefix "C-c l")
 
