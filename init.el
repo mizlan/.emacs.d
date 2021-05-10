@@ -20,8 +20,10 @@
 
 (global-set-key (kbd "C-'") 'imenu)
 (global-set-key (kbd "C-c p") 'projectile-switch-project)
+(global-set-key (kbd "C-,") 'switch-to-buffer)
 (global-set-key (kbd "C-c f") 'projectile--find-file)
 (global-set-key (kbd "C-c c") 'edit-config)
+(global-set-key (kbd "C-c s") 'counsel-rg)
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
