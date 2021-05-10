@@ -45,7 +45,7 @@
 (straight-use-package 'which-key)
 (straight-use-package 'magit)
 (straight-use-package 'projectile)
-(straight-use-package 'janet-mode)
+(straight-use-package 'evil)
 (straight-use-package 'keycast)
 (straight-use-package 'diminish)
 (straight-use-package 'company-mode)
