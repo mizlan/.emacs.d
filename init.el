@@ -113,3 +113,51 @@
 (global-set-key (kbd "C-=") 'zoom-in)
 (global-set-key (kbd "C--") 'zoom-out)
 
+(defun compile-and-run-cpp ()
+  (interactive)
+  (save-buffer)
+  (compile (concat "g++ -std=c++17 -Wshadow -Wall -DNOAM_LOCAL "
+		   buffer-file-name
+                   " -g -fsanitize=address -fsanitize=undefined -D_GLIBCXX_DEBUG && ./a.out < input") t)
+  (evil-window-right 1))
+
+(defun compile-and-run-python ()
+  (interactive)
+  (save-buffer)
+  (compile (concat "python3 "
+		   buffer-file-name
+                   " < input") t)
+  (evil-window-right 1))
+
+(evil-set-leader 'normal (kbd "SPC"))
+
+(evil-define-key 'normal 'c++-mode-map (kbd "<leader>cc") 'compile-and-run-cpp)
+(evil-define-key 'normal 'python-mode-map (kbd "<leader>cc") 'compile-and-run-python)
+
+; from enberg on #emacs
+(add-hook 'compilation-finish-functions
+  (lambda (buf str)
+    (if (null (string-match ".*exited abnormally.*" str))
+        ;;no errors, make the compilation window go away in a few seconds
+        (progn
+          (run-at-time
+           "5 sec" nil 'delete-windows-on
+           (get-buffer-create "*compilation*"))
+          (message "No Compilation Errors!")))))
+
+;; Source: http://www.emacswiki.org/emacs-en/download/misc-cmds.el
+(defun revert-buffer-no-confirm ()
+    "Revert buffer without confirmation."
+    (interactive)
+    (revert-buffer :ignore-auto :noconfirm))
+
+(defun clipboard-set-file-contents ()
+  (interactive)
+  (with-current-buffer
+      (or (get-file-buffer "/Users/michaellan/code/cp/proco-2021/input")
+	  (find-file-noselect "/Users/michaellan/code/cp/proco-2021/input"))
+    (erase-buffer)
+    (insert (current-kill 0))
+    (save-buffer)))
+
+(evil-define-key 'normal 'global (kbd "<leader>fp") 'clipboard-set-file-contents)
