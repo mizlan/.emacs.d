@@ -45,6 +45,7 @@
 (straight-use-package 'magit)
 (straight-use-package 'projectile)
 (straight-use-package 'evil)
+(straight-use-package 'evil-commentary)
 (straight-use-package 'keycast)
 (straight-use-package 'diminish)
 (straight-use-package 'company-mode)
@@ -57,17 +58,21 @@
 (straight-use-package 'typescript-mode)
 (straight-use-package 'janet-mode)
 
+(evil-mode)
+(evil-commentary-mode)
 (ivy-mode)
 (counsel-mode)
 (which-key-mode)
 (global-company-mode)
 (projectile-mode)
+(show-paren-mode)
 
 (diminish 'ivy-mode)
 (diminish 'counsel-mode)
 (diminish 'which-key-mode)
 (diminish 'company-mode)
 (diminish 'projectile-mode)
+(diminish 'evil-commentary-mode)
 
 (setq lsp-keymap-prefix "C-c l")
 
