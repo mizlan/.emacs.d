@@ -23,6 +23,7 @@
 (global-set-key (kbd "C-c f") 'projectile--find-file)
 (global-set-key (kbd "C-c c") 'edit-config)
 (global-set-key (kbd "C-c s") 'counsel-rg)
+; (global-set-key (kbd "SPC SPC") 'counsel-M-x)
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
@@ -118,6 +119,9 @@
 ;; Zoom settings
 (global-set-key (kbd "C-=") 'zoom-in)
 (global-set-key (kbd "C--") 'zoom-out)
+
+(load-file "/Users/michaellan/util/ATS2-Postiats/utils/emacs/ats2-mode.el")
+(load-file "/Users/michaellan/util/ATS2-Postiats/utils/emacs/flycheck-ats2.el")
 
 (defun compile-and-run-cpp ()
   (interactive)
