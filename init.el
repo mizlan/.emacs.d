@@ -5,7 +5,7 @@
 (setq inhibit-startup-screen t)
 (tool-bar-mode -1)
 
-(load-theme 'tango)
+
 
 (add-to-list 'default-frame-alist '(font . "Roboto Mono-14"))
 (add-to-list 'exec-path "/Users/michaellan/.ghcup/bin")
@@ -57,6 +57,12 @@
 (straight-use-package 'lsp-haskell)
 (straight-use-package 'typescript-mode)
 (straight-use-package 'janet-mode)
+(straight-use-package 'vimrc-mode)
+(straight-use-package '(emacs-faff-theme
+                        :type git
+                        :host github
+                        :repo "WJCFerguson/emacs-faff-theme"))
+(straight-use-package 'tao-theme)
 
 (evil-mode)
 (evil-commentary-mode)
