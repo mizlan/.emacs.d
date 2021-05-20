@@ -177,3 +177,5 @@
     (save-buffer)))
 
 (evil-define-key 'normal 'global (kbd "<leader>fp") 'clipboard-set-file-contents)
+
+(toggle-truncate-lines 1)
