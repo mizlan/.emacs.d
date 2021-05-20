@@ -67,6 +67,9 @@
                         :host github
                         :repo "WJCFerguson/emacs-faff-theme"))
 (straight-use-package 'tao-theme)
+(straight-use-package 'zenburn-theme)
+
+(load-theme 'zenburn t)
 
 (evil-mode)
 (evil-commentary-mode)
