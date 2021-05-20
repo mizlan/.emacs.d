@@ -5,8 +5,6 @@
 (setq inhibit-startup-screen t)
 (tool-bar-mode -1)
 
-
-
 (add-to-list 'default-frame-alist '(font . "Roboto Mono-14"))
 (add-to-list 'exec-path "/Users/michaellan/.ghcup/bin")
 
