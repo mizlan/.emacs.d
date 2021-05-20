@@ -93,8 +93,6 @@
 
 (global-set-key (kbd "C-c r") 'counsel-recentf)
 
-(set-face-attribute 'region nil :background "#bb9")
-
 (add-hook 'haskell-mode-hook #'lsp)
 (add-hook 'haskell-literate-mode-hook #'lsp)
 
