@@ -40,6 +40,9 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+(setq evil-want-C-u-scroll t)
+(setq evil-mode-line-format nil)
+
 (straight-use-package 'ivy)
 (straight-use-package 'counsel)
 (straight-use-package 'which-key)
