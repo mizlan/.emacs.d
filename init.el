@@ -66,6 +66,10 @@
                         :repo "WJCFerguson/emacs-faff-theme"))
 (straight-use-package 'tao-theme)
 (straight-use-package 'zenburn-theme)
+(straight-use-package 'pass)
+(straight-use-package 'password-store)
+(straight-use-package 'password-store-otp)
+(straight-use-package 'ivy-pass)
 
 (load-theme 'zenburn t)
 
