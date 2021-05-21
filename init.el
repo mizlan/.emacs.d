@@ -84,6 +84,8 @@
 (diminish 'company-mode)
 (diminish 'projectile-mode)
 (diminish 'evil-commentary-mode)
+(diminish 'eldoc-mode)
+(diminish 'auto-revert-mode)
 
 (setq lsp-keymap-prefix "C-c l")
 
