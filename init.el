@@ -93,8 +93,8 @@
 
 (global-set-key (kbd "C-c r") 'counsel-recentf)
 
-(add-hook 'haskell-mode-hook #'lsp)
-(add-hook 'haskell-literate-mode-hook #'lsp)
+;; (add-hook 'haskell-mode-hook #'lsp)
+;; (add-hook 'haskell-literate-mode-hook #'lsp)
 
 ;;; Weird workaround
 
