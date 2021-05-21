@@ -21,7 +21,6 @@
 (global-set-key (kbd "C-c f") 'projectile--find-file)
 (global-set-key (kbd "C-c c") 'edit-config)
 (global-set-key (kbd "C-c s") 'counsel-rg)
-; (global-set-key (kbd "SPC SPC") 'counsel-M-x)
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
