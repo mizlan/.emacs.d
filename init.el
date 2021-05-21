@@ -22,6 +22,12 @@
 (global-set-key (kbd "C-c c") 'edit-config)
 (global-set-key (kbd "C-c s") 'counsel-rg)
 
+(setq-default mode-line-format
+	      (list
+	       (propertize " %b %* " 'face 'mode-line-buffer-id)
+	       "(%m) "
+	       "%l "))
+
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
 (setq evil-want-C-u-scroll t)
