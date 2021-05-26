@@ -50,6 +50,8 @@
   (load bootstrap-file nil 'nomessage))
 
 (straight-use-package 'ivy)
+(straight-use-package 'selectrum)
+(straight-use-package 'selectrum-prescient)
 (straight-use-package 'counsel)
 (straight-use-package 'which-key)
 (straight-use-package 'magit)
@@ -85,6 +87,12 @@
 (evil-commentary-mode)
 (ivy-mode)
 (counsel-mode)
+(selectrum-mode +1)
+(selectrum-prescient-mode +1)
+(prescient-persist-mode +1)
+;; (ivy-mode)
+;; (counsel-mode)
+;; (counsel-projectile-mode)
 (which-key-mode)
 (global-company-mode)
 (projectile-mode)
@@ -98,6 +106,8 @@
 (diminish 'evil-commentary-mode)
 (diminish 'eldoc-mode)
 (diminish 'auto-revert-mode)
+
+(global-set-key (kbd "C-x C-z") #'selectrum-repeat)
 
 (setq lsp-keymap-prefix "C-c l")
 
