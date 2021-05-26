@@ -217,3 +217,14 @@
 (evil-define-key 'normal 'global (kbd "<leader>fp") 'clipboard-set-file-contents)
 
 (toggle-truncate-lines 1)
+(defun give-me-the-repo ()
+  "Give me a repo."
+  (interactive)
+  (let ((link (read-string "Link: "))
+        (tempdir (make-temp-file "git-thing" 'directory)))
+    (shell-command (concat "git clone --depth=1 "
+                           (shell-quote-argument link)
+                           " "
+                           tempdir))
+    (dired tempdir)))
+
