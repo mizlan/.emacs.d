@@ -115,8 +115,18 @@
 
 (global-set-key (kbd "C-c r") 'counsel-recentf)
 
-;; (add-hook 'haskell-mode-hook #'lsp)
-;; (add-hook 'haskell-literate-mode-hook #'lsp)
+(setq company-idle-delay 0.1)
+(setq company-minimum-prefix-length 1)
+
+(setq haskell-interactive-popup-errors nil)
+(add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+
+(evil-define-operator do-the-thing (beg end)
+  (interactive "<r>")
+  (cider-eval-region beg end))
+(evil-define-key 'normal clojure-mode-map (kbd "g r") #'do-the-thing)
+
+(setq cider-repl-display-help-banner nil)
 
 ;;; Weird workaround
 
