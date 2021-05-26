@@ -4,6 +4,9 @@
 (toggle-scroll-bar -1)
 (setq inhibit-startup-screen t)
 (tool-bar-mode -1)
+(setq scroll-conservatively 101)
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil)))
+(setq mouse-wheel-progressive-speed nil)
 
 (add-to-list 'default-frame-alist '(font . "Roboto Mono-14"))
 (add-to-list 'exec-path "/Users/michaellan/.ghcup/bin")
