@@ -199,32 +199,28 @@
            (get-buffer-create "*compilation*"))
           (message "No Compilation Errors!")))))
 
-;; Source: http://www.emacswiki.org/emacs-en/download/misc-cmds.el
-(defun revert-buffer-no-confirm ()
-    "Revert buffer without confirmation."
-    (interactive)
-    (revert-buffer :ignore-auto :noconfirm))
-
-(defun clipboard-set-file-contents ()
+(defun clipboard->file (filepath)
+  "Write clipboard to FILEPATH."
   (interactive)
   (with-current-buffer
-      (or (get-file-buffer "/Users/michaellan/code/cp/proco-2021/input")
-	  (find-file-noselect "/Users/michaellan/code/cp/proco-2021/input"))
+      (or (get-file-buffer filepath)
+	  (find-file-noselect filepath))
     (erase-buffer)
     (insert (current-kill 0))
     (save-buffer)))
 
-(evil-define-key 'normal 'global (kbd "<leader>fp") 'clipboard-set-file-contents)
+(evil-define-key 'normal 'global (kbd "<leader>fp") '(clipboard->file "/Users/michaellan/code/cp/proco-2021/input"))
 
-(toggle-truncate-lines 1)
-(defun give-me-the-repo ()
-  "Give me a repo."
+(set-default 'truncate-lines t)
+
+(defun give-me-the-repo (&optional repo)
+  "Give me REPO."
   (interactive)
-  (let ((link (read-string "Link: "))
+  (let ((link (or repo
+		  (read-string "link: " )))
         (tempdir (make-temp-file "git-thing" 'directory)))
     (shell-command (concat "git clone --depth=1 "
                            (shell-quote-argument link)
                            " "
                            tempdir))
     (dired tempdir)))
-
