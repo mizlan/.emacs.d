@@ -53,11 +53,13 @@
 (straight-use-package 'selectrum)
 (straight-use-package 'selectrum-prescient)
 (straight-use-package 'counsel)
+(straight-use-package 'counsel-projectile)
 (straight-use-package 'which-key)
 (straight-use-package 'magit)
 (straight-use-package 'projectile)
 (straight-use-package 'evil)
 (straight-use-package 'evil-commentary)
+(straight-use-package 'evil-collection)
 (straight-use-package 'keycast)
 (straight-use-package 'diminish)
 (straight-use-package 'company-mode)
@@ -70,23 +72,25 @@
 (straight-use-package 'typescript-mode)
 (straight-use-package 'janet-mode)
 (straight-use-package 'vimrc-mode)
-(straight-use-package '(emacs-faff-theme
-                        :type git
-                        :host github
-                        :repo "WJCFerguson/emacs-faff-theme"))
-(straight-use-package 'tao-theme)
 (straight-use-package 'zenburn-theme)
 (straight-use-package 'pass)
 (straight-use-package 'password-store)
-(straight-use-package 'password-store-otp)
 (straight-use-package 'ivy-pass)
+(straight-use-package 'notmuch)
+
+(straight-use-package '(plz
+			:type git
+			:host github
+			:repo "alphapapa/plz.el"))
+(straight-use-package '(ement
+			:type git
+			:host github
+			:repo "alphapapa/ement.el"))
 
 (load-theme 'zenburn t)
 
 (evil-mode)
 (evil-commentary-mode)
-(ivy-mode)
-(counsel-mode)
 (selectrum-mode +1)
 (selectrum-prescient-mode +1)
 (prescient-persist-mode +1)
@@ -97,6 +101,7 @@
 (global-company-mode)
 (projectile-mode)
 (show-paren-mode)
+(global-hl-line-mode)
 
 (diminish 'ivy-mode)
 (diminish 'counsel-mode)
@@ -125,6 +130,9 @@
   (interactive "<r>")
   (cider-eval-region beg end))
 (evil-define-key 'normal clojure-mode-map (kbd "g r") #'do-the-thing)
+
+;; (evil-define-key 'insert 'company-active-map (kbd "C-n") 'company-select-next-or-abort)
+;; (evil-define-key 'insert 'company-active-map (kbd "C-p") 'company-select-previous-or-abort)
 
 (setq cider-repl-display-help-banner nil)
 
