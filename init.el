@@ -8,6 +8,8 @@
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil)))
 (setq mouse-wheel-progressive-speed nil)
 
+(setq blink-cursor-blinks 100)
+
 (add-to-list 'default-frame-alist '(font . "Roboto Mono-14"))
 (add-to-list 'exec-path "/Users/michaellan/.ghcup/bin")
 
