@@ -126,15 +126,25 @@
 (setq haskell-interactive-popup-errors nil)
 (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
 
-(evil-define-operator do-the-thing (beg end)
+(evil-define-operator cider-eval-region-thing (beg end)
   (interactive "<r>")
   (cider-eval-region beg end))
-(evil-define-key 'normal clojure-mode-map (kbd "g r") #'do-the-thing)
+(evil-define-key 'normal clojure-mode-map (kbd "g r") #'cider-eval-region-thing)
 
-;; (evil-define-key 'insert 'company-active-map (kbd "C-n") 'company-select-next-or-abort)
-;; (evil-define-key 'insert 'company-active-map (kbd "C-p") 'company-select-previous-or-abort)
+(evil-define-operator elisp-eval-region-thing (beg end)
+  (interactive "<r>")
+  (eval-region beg end))
+(evil-define-key 'normal 'emacs-lisp-mode-map (kbd "g r") #'elisp-eval-region-thing)
+
+(evil-define-key 'insert 'company-active-map (kbd "C-n") 'company-select-next-or-abort)
+(evil-define-key 'insert 'company-active-map (kbd "C-p") 'company-select-previous-or-abort)
 
 (setq cider-repl-display-help-banner nil)
+(evil-define-key 'normal 'clojure-mode-map (kbd "<leader>dc") 'cider-clojuredocs)
+(evil-define-key 'normal 'clojure-mode-map (kbd "<leader>dd") 'cider-doc)
+(evil-define-key 'normal 'clojure-mode-map (kbd "g d") 'cider-find-var)
+
+(evil-define-key 'normal 'global (kbd "<leader>f") 'find-file)
 
 ;;; Weird workaround
 
