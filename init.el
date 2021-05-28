@@ -23,7 +23,6 @@
 (global-set-key (kbd "C-,") 'switch-to-buffer)
 (global-set-key (kbd "C-c f") 'projectile--find-file)
 (global-set-key (kbd "C-c c") 'edit-config)
-(global-set-key (kbd "C-c s") 'counsel-rg)
 
 (setq-default mode-line-format
 	      (list
@@ -120,6 +119,8 @@
 
 (global-set-key (kbd "C-c r") 'counsel-recentf)
 
+(evil-set-leader 'normal (kbd "SPC"))
+
 (setq company-idle-delay 0.1)
 (setq company-minimum-prefix-length 1)
 
@@ -192,8 +193,6 @@
 		   buffer-file-name
                    " < input") t)
   (evil-window-right 1))
-
-(evil-set-leader 'normal (kbd "SPC"))
 
 (evil-define-key 'normal 'c++-mode-map (kbd "<leader>cc") 'compile-and-run-cpp)
 (evil-define-key 'normal 'python-mode-map (kbd "<leader>cc") 'compile-and-run-python)
