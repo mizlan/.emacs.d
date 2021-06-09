@@ -147,35 +147,9 @@
 (evil-define-key 'normal 'clojure-mode-map (kbd "<leader>dd") 'cider-doc)
 (evil-define-key 'normal 'clojure-mode-map (kbd "g d") 'cider-find-var)
 
-(evil-define-key 'normal 'global (kbd "<leader>f") 'find-file)
-
-;;; Weird workaround
-
-(defvar original-font-size nil)
-
-(defun adjust-font-size (delta)
-  (let* ((old-size (face-attribute 'default :height))
-         (new-size (max (max delta (- delta)) (min 300 (+ delta old-size)))))
-    (setq original-font-size (or original-font-size old-size))
-    (set-face-attribute 'default nil :height new-size)
-    (message "Font size set to %d (was %d)" (face-attribute 'default :height) old-size)))
-
-(defun zoom-in ()
-  (interactive)
-  (adjust-font-size +10))
-
-(defun zoom-out ()
-  (interactive)
-  (adjust-font-size -10))
-
-(defun zoom-reset ()
-  (interactive)
-  (when original-font-size
-    (set-face-attribute 'default nil :height original-font-size)))
-
-;; Zoom settings
-(global-set-key (kbd "C-=") 'zoom-in)
-(global-set-key (kbd "C--") 'zoom-out)
+(evil-define-key 'normal 'global (kbd "<leader>ff") 'find-file)
+(evil-define-key 'normal 'global (kbd "<leader>d") 'dired)
+(evil-define-key nil 'selectrum-minibuffer-map [escape] 'minibuffer-keyboard-quit)
 
 (load-file "/Users/michaellan/util/ATS2-Postiats/utils/emacs/ats2-mode.el")
 (load-file "/Users/michaellan/util/ATS2-Postiats/utils/emacs/flycheck-ats2.el")
