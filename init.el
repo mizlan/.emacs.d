@@ -119,6 +119,18 @@
 (diminish 'eldoc-mode)
 (diminish 'auto-revert-mode)
 
+(setq completion-styles '(orderless))
+
+;; Persist history over Emacs restarts
+(savehist-mode)
+
+;; Optional performance optimization
+;; by highlighting only the visible candidates.
+(setq orderless-skip-highlighting (lambda () selectrum-is-active))
+
+(setq selectrum-refine-candidates-function #'orderless-filter)
+(setq selectrum-highlight-candidates-function #'orderless-highlight-matches)
+
 (global-set-key (kbd "C-x C-z") #'selectrum-repeat)
 
 (setq lsp-keymap-prefix "C-c l")
