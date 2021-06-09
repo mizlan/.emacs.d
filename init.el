@@ -10,7 +10,7 @@
 
 (setq blink-cursor-blinks 100)
 
-(add-to-list 'default-frame-alist '(font . "Roboto Mono-14"))
+(add-to-list 'default-frame-alist '(font . "Roboto Mono-18"))
 (add-to-list 'exec-path "/Users/michaellan/.ghcup/bin")
 
 (recentf-mode 1)
