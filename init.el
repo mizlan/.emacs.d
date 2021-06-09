@@ -51,10 +51,13 @@
   (load bootstrap-file nil 'nomessage))
 
 (straight-use-package 'ivy)
+(straight-use-package 'orderless)
 (straight-use-package 'selectrum)
-(straight-use-package 'selectrum-prescient)
+;; (straight-use-package 'selectrum-prescient)
+(straight-use-package 'marginalia)
 (straight-use-package 'counsel)
 (straight-use-package 'counsel-projectile)
+(straight-use-package 'ripgrep)
 (straight-use-package 'which-key)
 (straight-use-package 'magit)
 (straight-use-package 'projectile)
@@ -78,7 +81,10 @@
 (straight-use-package 'password-store)
 (straight-use-package 'ivy-pass)
 (straight-use-package 'notmuch)
-
+(straight-use-package '(nano-theme
+			:type git
+			:host github
+			:repo "rougier/nano-theme"))
 (straight-use-package '(plz
 			:type git
 			:host github
