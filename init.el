@@ -215,3 +215,18 @@
                            " "
                            tempdir))
     (dired tempdir)))
+
+;; Notmuch
+
+(evil-define-key 'normal 'global (kbd "<leader>om") #'notmuch)
+(setq notmuch-hello-sections '(notmuch-hello-insert-alltags))
+(setq notmuch-search-oldest-first nil)
+(setq notmuch-saved-searches
+      '((:name "inbox" :query "tag:inbox" :key "i")
+	(:name "unread" :query "tag:unread" :key "u")
+	(:name "flagged" :query "tag:flagged" :key "f")
+	(:name "sent" :query "tag:sent" :key "t")
+	(:name "drafts" :query "tag:draft" :key "d")
+	(:name "all mail" :query "*" :key "a")
+	(:name "github" :query "tag:github" :key "g")
+	(:name "nnn" :query "tag:nnn" :key "n")))
