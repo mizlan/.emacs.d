@@ -263,3 +263,21 @@
 
 ;; TODO: figure out a way to do this without void symbol
 ;; (define-key notmuch-search-mode-map (kbd "d") #'mizlan/notmuch-delete)
+
+(defun go-to-eshell ()
+  (interactive)
+  (switch-to-buffer "*eshell*"))
+
+(global-set-key (kbd "C-c c") #'edit-config)
+(global-set-key (kbd "C-,") #'consult-buffer)
+(global-set-key (kbd "C-c SPC") #'consult-line)
+
+(defun select-password ()
+  "Interactively select a password and copy it to clipboard."
+  (interactive)
+  (require 'password-store)
+  (let ((pw (password-store--completing-read t)))
+    (password-store-copy pw)))
+
+(setq tab-always-indent 'complete)
+(setq completion-in-region-function #'consult-completion-in-region)
