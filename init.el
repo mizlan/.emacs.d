@@ -52,23 +52,16 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-(straight-use-package 'ivy)
-(straight-use-package 'orderless)
-(straight-use-package 'selectrum)
-;; (straight-use-package 'selectrum-prescient)
+(straight-use-package 'vertico)
 (straight-use-package 'marginalia)
-(straight-use-package 'counsel)
-(straight-use-package 'counsel-projectile)
+(straight-use-package 'consult)
+(straight-use-package 'orderless)
 (straight-use-package 'ripgrep)
 (straight-use-package 'which-key)
 (straight-use-package 'magit)
 (straight-use-package 'projectile)
-(straight-use-package 'evil)
-(straight-use-package 'evil-commentary)
-(straight-use-package 'evil-collection)
 (straight-use-package 'keycast)
 (straight-use-package 'diminish)
-(straight-use-package 'company-mode)
 (straight-use-package 'flycheck)
 (straight-use-package 'lsp-mode)
 (straight-use-package 'clojure-mode)
@@ -79,41 +72,26 @@
 (straight-use-package 'janet-mode)
 (straight-use-package 'vimrc-mode)
 (straight-use-package 'zenburn-theme)
+(straight-use-package 'modus-themes)
 (straight-use-package 'pass)
 (straight-use-package 'password-store)
-(straight-use-package 'ivy-pass)
 (straight-use-package 'notmuch)
-(straight-use-package '(nano-theme
-			:type git
-			:host github
-			:repo "rougier/nano-theme"))
-(straight-use-package '(plz
-			:type git
-			:host github
-			:repo "alphapapa/plz.el"))
-(straight-use-package '(ement
-			:type git
-			:host github
-			:repo "alphapapa/ement.el"))
 
-(load-theme 'zenburn t)
+;; (load-theme 'leuven t)
+;; (load-theme 'zenburn t)
 
-(evil-mode)
-(evil-commentary-mode)
-(selectrum-mode +1)
-(selectrum-prescient-mode +1)
-(prescient-persist-mode +1)
-;; (ivy-mode)
-;; (counsel-mode)
-;; (counsel-projectile-mode)
+(setq modus-themes-bold-constructs t)
+(setq modus-themes-completions 'moderate)
+(setq modus-themes-region 'bg-only)
+
+(load-theme 'modus-operandi t)
+
+(vertico-mode)
+(marginalia-mode)
 (which-key-mode)
-(global-company-mode)
 (projectile-mode)
 (show-paren-mode)
-(global-hl-line-mode)
 
-(diminish 'ivy-mode)
-(diminish 'counsel-mode)
 (diminish 'which-key-mode)
 (diminish 'company-mode)
 (diminish 'projectile-mode)
