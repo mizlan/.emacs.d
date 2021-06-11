@@ -230,15 +230,31 @@
 
 ;; Notmuch
 
-(evil-define-key 'normal 'global (kbd "<leader>om") #'notmuch)
+(setq notmuch-address-command 'internal)
+;; (evil-define-key 'normal 'global (kbd "<leader>om") #'notmuch)
+(global-set-key (kbd "C-c m") #'notmuch)
 (setq notmuch-hello-sections '(notmuch-hello-insert-alltags))
 (setq notmuch-search-oldest-first nil)
 (setq notmuch-saved-searches
       '((:name "inbox" :query "tag:inbox" :key "i")
-	(:name "unread" :query "tag:unread" :key "u")
-	(:name "flagged" :query "tag:flagged" :key "f")
-	(:name "sent" :query "tag:sent" :key "t")
-	(:name "drafts" :query "tag:draft" :key "d")
-	(:name "all mail" :query "*" :key "a")
-	(:name "github" :query "tag:github" :key "g")
-	(:name "nnn" :query "tag:nnn" :key "n")))
+        (:name "unread" :query "tag:unread" :key "u")
+        (:name "flagged" :query "tag:flagged" :key "f")
+        (:name "sent" :query "tag:sent" :key "t")
+        (:name "drafts" :query "tag:draft" :key "d")
+        (:name "all mail" :query "*" :key "a")
+        (:name "github" :query "tag:github" :key "g")
+        (:name "nnn" :query "tag:nnn" :key "n")))
+
+(defun mizlan/notmuch-delete ()
+  (interactive)
+  (notmuch-search-add-tag '("+deleted")))
+
+;; taken from https://jonathanchu.is/posts/emacs-notmuch-isync-msmtp-setup/
+(setq send-mail-function 'sendmail-send-it
+      sendmail-program "/usr/local/bin/msmtp"
+      mail-specify-envelope-from t
+      message-sendmail-envelope-from 'header
+      mail-envelope-from 'header)
+
+;; TODO: figure out a way to do this without void symbol
+;; (define-key notmuch-search-mode-map (kbd "d") #'mizlan/notmuch-delete)
