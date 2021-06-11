@@ -8,9 +8,11 @@
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil)))
 (setq mouse-wheel-progressive-speed nil)
 
+(setq-default truncate-lines t)
+
 (setq blink-cursor-blinks 100)
 
-(add-to-list 'default-frame-alist '(font . "Roboto Mono-18"))
+(add-to-list 'default-frame-alist '(font . "JetBrains Mono-18"))
 (add-to-list 'exec-path "/Users/michaellan/.ghcup/bin")
 
 (recentf-mode 1)
@@ -227,6 +229,9 @@
                            " "
                            tempdir))
     (dired tempdir)))
+
+(setq org-hide-emphasis-markers t)
+(setq org-hide-leading-stars t)
 
 ;; Notmuch
 
