@@ -23,21 +23,15 @@
   (interactive)
   (find-file (expand-file-name "init.el" user-emacs-directory)))
 
-(global-set-key (kbd "C-'") 'imenu)
-(global-set-key (kbd "C-,") 'switch-to-buffer)
-(global-set-key (kbd "C-c f") 'projectile--find-file)
-(global-set-key (kbd "C-c c") 'edit-config)
-
-(setq-default mode-line-format
-	      (list
-	       (propertize " %b %* " 'face 'mode-line-buffer-id)
-	       "(%m) "
-	       "%l "))
+;; (setq-default mode-line-format
+;;            (list
+;;             (propertize " %b %* " 'face 'mode-line-buffer-id)
+;;             "(%m) "
+;;             "%l "))
+(setq mode-line-percent-position nil)
+(setq line-number-mode nil)
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-
-(setq evil-want-C-u-scroll t)
-(setq evil-mode-line-format nil)
 
 (defvar bootstrap-version)
 (let ((bootstrap-file
@@ -99,64 +93,35 @@
 (diminish 'eldoc-mode)
 (diminish 'auto-revert-mode)
 
+(setq magit-auto-revert-mode nil)
+(with-eval-after-load 'magit
+  (require 'forge))
+
 (setq completion-styles '(orderless))
 
-;; Persist history over Emacs restarts
 (savehist-mode)
 
-;; Optional performance optimization
-;; by highlighting only the visible candidates.
-(setq orderless-skip-highlighting (lambda () selectrum-is-active))
-
-(setq selectrum-refine-candidates-function #'orderless-filter)
-(setq selectrum-highlight-candidates-function #'orderless-highlight-matches)
-
-(global-set-key (kbd "C-x C-z") #'selectrum-repeat)
-
+;; (evil-define-key 'normal 'global (kbd "<leader>gl") #'lsp)
 (setq lsp-keymap-prefix "C-c l")
 
-(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+(define-key projectile-mode-map (kbd "C-c p") #'projectile-command-map)
 
-(global-set-key (kbd "C-c r") 'counsel-recentf)
-
-(evil-set-leader 'normal (kbd "SPC"))
-
-(setq company-idle-delay 0.1)
-(setq company-minimum-prefix-length 1)
+;; (evil-set-leader 'normal (kbd "SPC"))
 
 (setq haskell-interactive-popup-errors nil)
 (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
 
-(evil-define-operator cider-eval-region-thing (beg end)
-  (interactive "<r>")
-  (cider-eval-region beg end))
-(evil-define-key 'normal clojure-mode-map (kbd "g r") #'cider-eval-region-thing)
-
-(evil-define-operator elisp-eval-region-thing (beg end)
-  (interactive "<r>")
-  (eval-region beg end))
-(evil-define-key 'normal 'emacs-lisp-mode-map (kbd "g r") #'elisp-eval-region-thing)
-
-(evil-define-key 'insert 'company-active-map (kbd "C-n") 'company-select-next-or-abort)
-(evil-define-key 'insert 'company-active-map (kbd "C-p") 'company-select-previous-or-abort)
-
 (setq cider-repl-display-help-banner nil)
-(evil-define-key 'normal 'clojure-mode-map (kbd "<leader>dc") 'cider-clojuredocs)
-(evil-define-key 'normal 'clojure-mode-map (kbd "<leader>dd") 'cider-doc)
-(evil-define-key 'normal 'clojure-mode-map (kbd "g d") 'cider-find-var)
-
-(evil-define-key 'normal 'global (kbd "<leader>ff") 'find-file)
-(evil-define-key 'normal 'global (kbd "<leader>d") 'dired)
-(evil-define-key nil 'selectrum-minibuffer-map [escape] 'minibuffer-keyboard-quit)
 
 (load-file "/Users/michaellan/util/ATS2-Postiats/utils/emacs/ats2-mode.el")
 (load-file "/Users/michaellan/util/ATS2-Postiats/utils/emacs/flycheck-ats2.el")
 
 (defun compile-and-run-cpp ()
+  "Run a cpp file (meant for competitive programming)."
   (interactive)
   (save-buffer)
   (compile (concat "g++ -std=c++17 -Wshadow -Wall -DNOAM_LOCAL "
-		   buffer-file-name
+                   buffer-file-name
                    " -g -fsanitize=address -fsanitize=undefined -D_GLIBCXX_DEBUG && ./a.out < input") t)
   (evil-window-right 1))
 
@@ -164,12 +129,9 @@
   (interactive)
   (save-buffer)
   (compile (concat "python3 "
-		   buffer-file-name
+                   buffer-file-name
                    " < input") t)
   (evil-window-right 1))
-
-(evil-define-key 'normal 'c++-mode-map (kbd "<leader>cc") 'compile-and-run-cpp)
-(evil-define-key 'normal 'python-mode-map (kbd "<leader>cc") 'compile-and-run-python)
 
 ; from enberg on #emacs
 (add-hook 'compilation-finish-functions
@@ -187,20 +149,16 @@
   (interactive)
   (with-current-buffer
       (or (get-file-buffer filepath)
-	  (find-file-noselect filepath))
+          (find-file-noselect filepath))
     (erase-buffer)
     (insert (current-kill 0))
     (save-buffer)))
 
-(evil-define-key 'normal 'global (kbd "<leader>fp") '(clipboard->file "/Users/michaellan/code/cp/proco-2021/input"))
-
-(set-default 'truncate-lines t)
-
 (defun give-me-the-repo (&optional repo)
-  "Give me REPO."
+  "Clone REPO and open dired"
   (interactive)
   (let ((link (or repo
-		  (read-string "link: " )))
+                  (read-string "link: " )))
         (tempdir (make-temp-file "git-thing" 'directory)))
     (shell-command (concat "git clone --depth=1 "
                            (shell-quote-argument link)
