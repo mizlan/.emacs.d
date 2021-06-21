@@ -46,6 +46,7 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+(straight-use-package 'better-defaults)
 (straight-use-package 'vertico)
 (straight-use-package 'marginalia)
 (straight-use-package 'consult)
