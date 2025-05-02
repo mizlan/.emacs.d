@@ -47,7 +47,14 @@
 
 (elpaca-process-queues)
 
+(setq modus-operandi-palette-overrides
+      '((bg-region bg-cyan-nuanced)
+	(fg-region unspecified)))
+
 (load-theme 'modus-operandi t)
+
+(custom-set-faces
+ '(region ((t :extend nil))))
 
 (use-package emacs
   :ensure nil
@@ -72,7 +79,7 @@
   :custom
   (backup-directory-alist '(("." . "~/emacsbackups")))
   (dired-auto-revert-buffer t)
-  
+
   (ring-bell-function 'ignore)
   (search-whitespace-regexp ".*?")
   (which-key-idle-delay 0.2)
