@@ -59,6 +59,9 @@
 (custom-set-faces
  '(region ((t :extend nil))))
 
+(custom-set-faces
+ '(secondary-selection ((t :extend nil))))
+
 (use-package emacs
   :ensure nil
 
@@ -90,6 +93,10 @@
   (mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil)))
   (mouse-wheel-progressive-speed nil)
   (scroll-conservatively 101))
+
+(use-package kmacro
+  :ensure nil
+  :bind ("C-c K" . kmacro-end-or-call-macro))
 
 (use-package recentf
   :ensure nil
