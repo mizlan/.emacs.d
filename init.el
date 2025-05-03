@@ -45,6 +45,9 @@
 (use-package no-littering
   :ensure t)
 
+(use-package diminish
+  :ensure t)
+
 (elpaca-process-queues)
 
 (setq modus-operandi-palette-overrides
@@ -58,16 +61,14 @@
 
 (use-package emacs
   :ensure nil
+
   :config
-  
   (tool-bar-mode -1)
   (toggle-scroll-bar -1)
   (menu-bar-mode -1)
 
   (pixel-scroll-precision-mode 1)
-  (which-key-mode 1)
   (savehist-mode 1)
-  (recentf-mode 1)
 
   (let ((treesit-path (no-littering-expand-var-file-name "tree-sitter")))
     (setq treesit--install-language-grammar-out-dir-history (list treesit-path))
@@ -82,21 +83,38 @@
 
   (ring-bell-function 'ignore)
   (search-whitespace-regexp ".*?")
-  (which-key-idle-delay 0.2)
   (show-paren-delay 0)
 
   (modus-themes-bold-constructs t)
-
-  (recentf-max-saved-items 500)
-  (recentf-max-menu-items 50)
 
   (mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil)))
   (mouse-wheel-progressive-speed nil)
   (scroll-conservatively 101))
 
+(use-package recentf
+  :ensure nil
+  :config
+  (recentf-mode 1)
+  :custom
+  (recentf-max-saved-items 500)
+  (recentf-max-menu-items 50))
+
+(use-package which-key
+  :ensure nil
+  :diminish which-key-mode
+  :config
+  (which-key-mode 1)
+  :custom
+  (which-key-idle-delay 0.2))
+
 (use-package goto-last-change
   :ensure t
   :bind ("C-;" . goto-last-change))
+
+(use-package undo-fu-session
+  :ensure t
+  :config
+  (undo-fu-session-global-mode))
 
 (use-package vertico
   :ensure t
@@ -114,9 +132,9 @@
    ("C-c ," . #'consult-buffer)
    ("C-c s" . #'consult-ripgrep)
    ("C-c r" . #'consult-recent-file))
-  :config
-  (setq xref-show-xrefs-function #'consult-xref
-	xref-show-definitions-function #'consult-xref))
+  :custom
+  (xref-show-xrefs-function #'consult-xref)
+  (xref-show-definitions-function #'consult-xref))
 
 (use-package marginalia
   :ensure t
@@ -144,6 +162,8 @@
 
 (use-package corfu
   :ensure t
+  :config
+  (global-corfu-mode)
   :custom
   (tab-always-indent 'complete))
 
@@ -263,6 +283,7 @@
   :ensure t
   :config
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
+  (global-diff-hl-mode)
   :custom
   (diff-hl-draw-borders nil))
 
@@ -276,22 +297,16 @@
    :map org-mode-map
    ("C-c i" . consult-org-heading))
   :hook (org-mode . org-indent-mode)
-  :diminish (org-indent-mode)
+  :diminish org-indent-mode
   :custom
   (org-log-done 'time)
+  (org-hide-emphasis-markers t)
   (org-directory "~/org/")
   (org-agenda-files '("~/org/"))
   (org-capture-templates
    '(("j" "Journal entry" entry
       (file+headline "journal.org" "Journalbob")
       "* %^t journal entry"))))
-
-(use-package diminish
-  :ensure t
-  :config
-  ;; TODO: use use-package's support for :diminish
-  (diminish 'which-key-mode)
-  (diminish 'eldoc-mode))
 
 (use-package olivetti
   :ensure t
@@ -320,7 +335,6 @@
 (elpaca (everforest
 	 :host github
 	 :repo "Theory-of-Everything/everforest-emacs"))
-
 
 (use-package typst-ts-mode
   :ensure t
