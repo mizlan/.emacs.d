@@ -50,17 +50,16 @@
 
 (elpaca-process-queues)
 
-(setq modus-operandi-palette-overrides
-      '((bg-region bg-cyan-nuanced)
-	(fg-region unspecified)))
-
-(load-theme 'modus-operandi t)
-
-(custom-set-faces
- '(region ((t :extend nil))))
-
-(custom-set-faces
- '(secondary-selection ((t :extend nil))))
+(defun disciple/modus-themes-custom-set-faces (&rest _)
+  (modus-themes-with-colors
+    (custom-set-faces
+     '(region ((t :extend nil))))
+    (custom-set-faces
+     `(secondary-selection
+       ((t
+	 :background ,bg-red-nuanced
+	 :foreground unspecified
+	 :extend nil))))))
 
 (use-package emacs
   :ensure nil
@@ -80,7 +79,14 @@
   (setq custom-file (no-littering-expand-etc-file-name "custom.el"))
   (load custom-file)
   
+  (add-hook 'modus-themes-after-load-theme-hook
+	    #'disciple/modus-themes-custom-set-faces)
+
+  (require-theme 'modus-themes)
+  (modus-themes-load-theme 'modus-operandi)
+  
   :custom
+  (inhibit-startup-screen t)
   (backup-directory-alist '(("." . "~/emacsbackups")))
   (dired-auto-revert-buffer t)
 
@@ -88,7 +94,10 @@
   (search-whitespace-regexp ".*?")
   (show-paren-delay 0)
 
-  (modus-themes-bold-constructs t)
+  (indent-tabs-mode nil)
+  
+  (modus-operandi-palette-overrides '((bg-region bg-cyan-nuanced)
+                                      (fg-region unspecified)))
 
   (mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil)))
   (mouse-wheel-progressive-speed nil)
@@ -328,20 +337,23 @@
   :config
   (gcmh-mode 1))
 
-(elpaca (copilot
-	 :host github
-	 :repo "copilot-emacs/copilot.el"))
+(use-package copilot
+  :ensure ( :host github
+	    :repo "copilot-emacs/copilot.el")
+  
+  :bind ( :map copilot-completion-map
+	  ("TAB" . copilot-accept-completion)))
 
 (use-package websocket
   :ensure t)
 
-(elpaca (typst-preview
-	 :host github
-	 :repo "havarddj/typst-preview.el"))
+(use-package typst-preview
+  :ensure ( :host github
+	    :repo "havarddj/typst-preview.el"))
 
-(elpaca (everforest
-	 :host github
-	 :repo "Theory-of-Everything/everforest-emacs"))
+(use-package everforest-theme
+  :ensure ( :host github
+	    :repo "Theory-of-Everything/everforest-emacs"))
 
 (use-package typst-ts-mode
   :ensure t
