@@ -50,6 +50,9 @@
 
 (elpaca-process-queues)
 
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(add-hook 'elpaca-after-init-hook (lambda () (load custom-file 'noerror)))
+
 (defun disciple/modus-themes-custom-set-faces (&rest _)
   (modus-themes-with-colors
     (custom-set-faces
@@ -57,9 +60,9 @@
     (custom-set-faces
      `(secondary-selection
        ((t
-	 :background ,bg-red-nuanced
-	 :foreground unspecified
-	 :extend nil))))))
+         :background ,bg-red-nuanced
+         :foreground unspecified
+         :extend nil))))))
 
 (use-package emacs
   :ensure nil
@@ -76,16 +79,14 @@
     (setq treesit--install-language-grammar-out-dir-history (list treesit-path))
     (setq treesit-extra-load-path (list treesit-path)))
 
-  (setq custom-file (no-littering-expand-etc-file-name "custom.el"))
-  (load custom-file)
-  
   (add-hook 'modus-themes-after-load-theme-hook
 	    #'disciple/modus-themes-custom-set-faces)
 
   (require-theme 'modus-themes)
   (modus-themes-load-theme 'modus-operandi)
-  
+
   :custom
+  (frame-resize-pixelwise t)
   (inhibit-startup-screen t)
   (backup-directory-alist '(("." . "~/emacsbackups")))
   (dired-auto-revert-buffer t)
@@ -95,9 +96,11 @@
   (show-paren-delay 0)
 
   (indent-tabs-mode nil)
-  
+
   (modus-operandi-palette-overrides '((bg-region bg-cyan-nuanced)
                                       (fg-region unspecified)))
+  (modus-themes-bold-constructs t)
+  (modus-themes-italic-constructs nil)
 
   (mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil)))
   (mouse-wheel-progressive-speed nil)
@@ -167,7 +170,7 @@
   :ensure t
   :bind (("C-." . embark-act)
 	 ("M-." . embark-dwim))
-  :config    
+  :config
   ;; TODO don't confirm kill-buffer in switch-buffer
   (setq embark-quit-after-action nil))
 
@@ -185,7 +188,7 @@
 
 (use-package eldoc-box
   :ensure t)
-   
+
 (defun meow-setup ()
   (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
   (meow-motion-define-key
@@ -340,7 +343,7 @@
 (use-package copilot
   :ensure ( :host github
 	    :repo "copilot-emacs/copilot.el")
-  
+
   :bind ( :map copilot-completion-map
 	  ("TAB" . copilot-accept-completion)))
 
@@ -361,7 +364,13 @@
   (with-eval-after-load 'eglot
     (with-eval-after-load 'typst-ts-mode
       (add-to-list 'eglot-server-programs
-		   '(typst-ts-mode "tinymist")))))
+		   '(typst-ts-mode "tinymist"))))
+
+  (custom-set-faces '(typst-ts-superscript-face ((t :height 1.0))))
+  (custom-set-faces '(typst-ts-subscript-face ((t :height 1.0))))
+  :custom
+  (typst-ts-math-script-display '((raise 0) . (raise 0)))
+  )
 
 (use-package tuareg
   :ensure t)
@@ -411,16 +420,16 @@
 				 (let ((from (save-restriction
 					       (message-narrow-to-headers-or-head)
 					       (message-fetch-field "From"))))
-				   (if (string-match-p "ucla" from)
-				       (setq message-sendmail-extra-arguments '("send" "--quiet" "-t" "-C" "~/Mail/School"))
-				     (setq message-sendmail-extra-arguments '("send" "--quiet" "-t" "-C" "~/Mail/Main"))))))
+                                   (if (string-match-p "ucla" from)
+                                       (setq message-sendmail-extra-arguments '("send" "--quiet" "-t" "-C" "~/Mail/School"))
+                                     (setq message-sendmail-extra-arguments '("send" "--quiet" "-t" "-C" "~/Mail/Main"))))))
   :custom
   (user-full-name "Michael Lan")
   (user-mail-address "michaellan202@gmail.com")
 
   (notmuch-search-line-faces '(("important" . warning)
-			       ("unread" . notmuch-search-unread-face)
-			       ("flagged" . notmuch-search-flagged-face)))
+                               ("unread" . notmuch-search-unread-face)
+                               ("flagged" . notmuch-search-flagged-face)))
   (notmuch-search-oldest-first nil)
   ;; NOTE: there are two very similar "send mail" commands in
   ;; sendmail.el and message.el. Only the one in message.el supports
