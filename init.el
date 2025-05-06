@@ -45,9 +45,6 @@
 (use-package no-littering
   :ensure t)
 
-(use-package diminish
-  :ensure t)
-
 (elpaca-process-queues)
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -82,6 +79,7 @@
   (add-hook 'modus-themes-after-load-theme-hook
 	    #'disciple/modus-themes-custom-set-faces)
 
+  (set-frame-font "ZetBrains Mono-16" nil t)
   (require-theme 'modus-themes)
   (modus-themes-load-theme 'modus-operandi)
 
@@ -90,11 +88,13 @@
   (inhibit-startup-screen t)
   (backup-directory-alist '(("." . "~/emacsbackups")))
   (dired-auto-revert-buffer t)
+  (enable-recursive-minibuffers t)
 
   (ring-bell-function 'ignore)
   (search-whitespace-regexp ".*?")
   (show-paren-delay 0)
 
+  (show-trailing-whitespace t)
   (indent-tabs-mode nil)
 
   (modus-operandi-palette-overrides '((bg-region bg-cyan-nuanced)
@@ -105,6 +105,11 @@
   (mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil)))
   (mouse-wheel-progressive-speed nil)
   (scroll-conservatively 101))
+
+(use-package minions
+  :ensure t
+  :config
+  (minions-mode 1))
 
 (use-package kmacro
   :ensure nil
@@ -120,7 +125,6 @@
 
 (use-package which-key
   :ensure nil
-  :diminish which-key-mode
   :config
   (which-key-mode 1)
   :custom
@@ -289,7 +293,7 @@
   (add-to-list 'magit-blame-styles
 	       '(margin
 		 (margin-width . 32)
-		 (margin-format . ("%C %c %f"))
+		 (margin-format . ("%c %C %f"))
 		 (margin-face . magit-blame-margin)
 		 (margin-body-face . magit-blame-dimmed)
 		 (show-message . t))))
@@ -306,17 +310,14 @@
   :custom
   (diff-hl-draw-borders nil))
 
-(set-frame-font "ZetBrains Mono-16" nil t)
-
 (use-package org
   :ensure nil
-  :bind 
+  :bind
   (("C-c c" . org-capture)
    ("C-c a" . org-agenda)
    :map org-mode-map
    ("C-c i" . consult-org-heading))
   :hook (org-mode . org-indent-mode)
-  :diminish org-indent-mode
   :custom
   (org-log-done 'time)
   (org-hide-emphasis-markers t)
@@ -336,16 +337,18 @@
 
 (use-package gcmh
   :ensure t
-  :diminish gcmh-mode
   :config
   (gcmh-mode 1))
 
 (use-package copilot
   :ensure ( :host github
 	    :repo "copilot-emacs/copilot.el")
-
-  :bind ( :map copilot-completion-map
-	  ("TAB" . copilot-accept-completion)))
+  :bind ( :map copilot-mode-map
+          ("C-," . copilot-complete)
+          :map copilot-completion-map
+	  ("TAB" . copilot-accept-completion-by-word))
+  :custom
+  (copilot-idle-delay nil))
 
 (use-package websocket
   :ensure t)
@@ -369,8 +372,7 @@
   (custom-set-faces '(typst-ts-superscript-face ((t :height 1.0))))
   (custom-set-faces '(typst-ts-subscript-face ((t :height 1.0))))
   :custom
-  (typst-ts-math-script-display '((raise 0) . (raise 0)))
-  )
+  (typst-ts-math-script-display '((raise 0) . (raise 0))))
 
 (use-package tuareg
   :ensure t)
@@ -472,3 +474,9 @@
     (insert (format "%S" value))))
 
 (global-set-key (kbd "C-x C-y") #'disciple/replace-last-sexp)
+
+(use-package tip
+  :ensure ( :repo "https://git.sr.ht/~mafty/tip")
+  :custom
+  (tip-server-basedir "~/Repositories/tip-server-py")
+  (tip-server-port 54323))
