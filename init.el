@@ -89,6 +89,7 @@
   (backup-directory-alist '(("." . "~/emacsbackups")))
   (dired-auto-revert-buffer t)
   (enable-recursive-minibuffers t)
+  (split-width-threshold 80)
 
   (ring-bell-function 'ignore)
   (search-whitespace-regexp ".*?")
@@ -193,6 +194,12 @@
 (use-package eldoc-box
   :ensure t)
 
+(use-package expand-region
+  :ensure t)
+
+(use-package embrace
+  :ensure t)
+
 (defun meow-setup ()
   (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
   (meow-motion-define-key
@@ -235,7 +242,7 @@
    '("b" . meow-back-word)
    '("B" . meow-back-symbol)
    '("c" . meow-change)
-   '("d" . meow-delete)
+   '("d" . meow-kill)
    '("D" . meow-backward-delete)
    '("e" . meow-next-word)
    '("E" . meow-next-symbol)
@@ -253,22 +260,23 @@
    '("l" . meow-right)
    '("L" . meow-right-expand)
    '("m" . meow-join)
+   '("M" . embrace-commander)
    '("n" . meow-search)
-   '("o" . meow-block)
+   '("o" . er/expand-region)
    '("O" . meow-to-block)
    '("p" . meow-yank)
    '("q" . meow-quit)
    '("Q" . meow-goto-line)
    '("r" . meow-replace)
    '("R" . meow-swap-grab)
-   '("s" . meow-kill)
+   '("s" . meow-line)
    '("t" . meow-till)
    '("u" . meow-undo)
    '("U" . meow-undo-in-selection)
    '("v" . meow-visit)
    '("w" . meow-mark-word)
    '("W" . meow-mark-symbol)
-   '("x" . meow-line)
+   '("x" . meow-delete)
    '("X" . meow-goto-line)
    '("y" . meow-save)
    '("Y" . meow-sync-grab)
@@ -283,8 +291,26 @@
   (add-to-list 'meow-mode-state-list '(notmuch-search-mode . motion))
   (add-to-list 'meow-mode-state-list '(notmuch-tree-mode . motion))
   (add-to-list 'meow-mode-state-list '(notmuch-show-mode . motion))
+
+  (meow-thing-register 'angle
+                       '(pair ("<") (">"))
+                       '(pair ("<") (">")))
+
+  (setq meow-char-thing-table
+        '((?f . round)
+          (?d . square)
+          (?s . curly)
+          (?a . angle)
+          (?r . string)
+          (?v . paragraph)
+          (?c . line)
+          (?x . buffer)))
+
   (meow-setup)
-  (meow-global-mode 1))
+  (meow-global-mode 1)
+  :custom
+  (meow-expand-hint-counts
+   '((word . 0) (line . 30) (block . 30) (find . 30) (till . 30) (symbol . 0))))
 
 (use-package magit
   :ensure t
@@ -311,7 +337,8 @@
   (diff-hl-draw-borders nil))
 
 (use-package org
-  :ensure nil
+  :ensure `(org :repo "https://code.tecosaur.net/tec/org-mode.git/"
+                :branch "dev")
   :bind
   (("C-c c" . org-capture)
    ("C-c a" . org-agenda)
@@ -350,16 +377,15 @@
   :custom
   (copilot-idle-delay nil))
 
+(use-package markdown-mode
+  :ensure t)
+
 (use-package websocket
   :ensure t)
 
 (use-package typst-preview
   :ensure ( :host github
 	    :repo "havarddj/typst-preview.el"))
-
-(use-package everforest-theme
-  :ensure ( :host github
-	    :repo "Theory-of-Everything/everforest-emacs"))
 
 (use-package typst-ts-mode
   :ensure t
@@ -385,7 +411,9 @@
   (ocaml-eglot . eglot-ensure))
 
 (use-package proof-general
-  :ensure t)
+  :ensure t
+  :custom
+  (proof-three-window-mode-policy 'hybrid))
 
 (use-package opam-switch-mode
   :ensure t
