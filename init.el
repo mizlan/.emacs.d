@@ -346,7 +346,7 @@
   (diff-hl-draw-borders nil))
 
 (use-package org
-  :ensure `(org :repo "https://code.tecosaur.net/tec/org-mode.git/"
+  :ensure (org :repo "https://code.tecosaur.net/tec/org-mode.git/"
                 :branch "dev")
   :bind
   (("C-c c" . org-capture)
@@ -354,6 +354,11 @@
    :map org-mode-map
    ("C-c i" . consult-org-heading))
   :hook (org-mode . org-indent-mode)
+  :config
+  (org-babel-do-load-languages 'org-babel-load-languages
+                               (append org-babel-load-languages
+                                       '((python . t)
+                                         (R . t))))
   :custom
   (org-log-done 'time)
   (org-hide-emphasis-markers t)
@@ -362,7 +367,9 @@
   (org-capture-templates
    '(("j" "Journal entry" entry
       (file+headline "journal.org" "Journalbob")
-      "* %^t journal entry"))))
+      "* %^t journal entry")))
+  (org-confirm-babel-evaluate nil)
+  (org-src-preserve-indentation t))
 
 (use-package olivetti
   :ensure t
@@ -511,9 +518,3 @@
     (insert (format "%S" value))))
 
 (global-set-key (kbd "C-x C-y") #'disciple/replace-last-sexp)
-
-(use-package tip
-  :ensure ( :repo "https://git.sr.ht/~mafty/tip")
-  :custom
-  (tip-server-basedir "~/Repositories/tip-server-py")
-  (tip-server-port 54323))
