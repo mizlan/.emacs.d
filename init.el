@@ -180,6 +180,20 @@
   (completion-styles '(orderless basic))
   (completion-category-overrides '((file (styles basic partial-completion)))))
 
+(use-package everforest-theme
+  :ensure (everforest
+           :host github
+           :repo "Theory-of-Everything/everforest-emacs"))
+
+(use-package doom-themes
+  :ensure t)
+
+(use-package ox-gfm
+  :ensure t)
+
+(use-package org-modern
+  :ensure t)
+
 (use-package embark
   :ensure t
   :bind (("C-." . embark-act)
