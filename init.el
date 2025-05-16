@@ -61,6 +61,11 @@
          :foreground unspecified
          :extend nil))))))
 
+(defun disciple/show-trailing-whitespace ()
+  "Enable highlighting of trailing whitespace"
+  (interactive)
+  (setq show-trailing-whitespace t))
+
 (use-package emacs
   :ensure nil
 
@@ -78,6 +83,10 @@
 
   (add-hook 'modus-themes-after-load-theme-hook
 	    #'disciple/modus-themes-custom-set-faces)
+
+  (add-hook 'prog-mode-hook #'disciple/show-trailing-whitespace)
+  (remove-hook 'prog-mode-hook #'disciple/show-trailing-whitespace)
+  (add-hook 'text-mode-hook #'disciple/show-trailing-whitespace)
 
   (set-frame-font "ZetBrains Mono-16" nil t)
   (require-theme 'modus-themes)
