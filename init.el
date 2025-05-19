@@ -94,7 +94,7 @@
 
   :custom
   (frame-resize-pixelwise t)
-  (inhibit-startup-screen t)
+  (inhibit-splash-screen t)
   (backup-directory-alist '(("." . "~/emacsbackups")))
   (dired-auto-revert-buffer t)
   (enable-recursive-minibuffers t)
@@ -443,6 +443,7 @@
 (use-package proof-general
   :ensure t
   :custom
+  (proof-splash-enable nil)
   (proof-three-window-mode-policy 'hybrid))
 
 (use-package opam-switch-mode
