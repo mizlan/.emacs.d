@@ -408,6 +408,10 @@
   :ensure t
   :config
   (gcmh-mode 1))
+
+(use-package dtrt-indent
+  :ensure t)
+
 (use-package apheleia
   :ensure t
   :config
