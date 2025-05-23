@@ -188,12 +188,6 @@
 (use-package doom-themes
   :ensure t)
 
-(use-package ox-gfm
-  :ensure t)
-
-(use-package org-modern
-  :ensure t)
-
 (use-package embark
   :ensure t
   :bind (("C-." . embark-act)
@@ -384,6 +378,15 @@
       "* %^t journal entry")))
   (org-confirm-babel-evaluate nil)
   (org-src-preserve-indentation t))
+
+(use-package ox-gfm
+  :ensure t)
+
+(use-package org-modern
+  :ensure t
+  :after org
+  :config
+  (global-org-modern-mode))
 
 (use-package olivetti
   :ensure t
