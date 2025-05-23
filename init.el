@@ -497,13 +497,25 @@
    ("." . disciple/notmuch-repeat-tag))
 
   :config
-  (add-hook 'message-send-hook (lambda ()
-				 (let ((from (save-restriction
-					       (message-narrow-to-headers-or-head)
-					       (message-fetch-field "From"))))
-                                   (if (string-match-p "ucla" from)
-                                       (setq message-sendmail-extra-arguments '("send" "--quiet" "-t" "-C" "~/Mail/School"))
-                                     (setq message-sendmail-extra-arguments '("send" "--quiet" "-t" "-C" "~/Mail/Main"))))))
+  ;; Allow multiple address completions in buffer.
+  ;;
+  ;; "Some bug with notmuch address completion due to having notmuch-address-expand-name
+  ;; in the message--old-style-completion-functions variable."
+  ;; ref: https://github.com/doomemacs/doomemacs/issues/7747#issuecomment-2265358795
+  (defun pop-from-message-completion ()
+    (pop message--old-style-completion-functions))
+  (advice-add 'message-completion-function :after #'pop-from-message-completion)
+
+  (defun disciple/alter-sendmail-args ()
+    "Direct lieer to send via either personal or school email heuristically using the 'From:' field"
+    (let ((from (save-restriction
+		  (message-narrow-to-headers-or-head)
+		  (message-fetch-field "From"))))
+      (setq message-sendmail-extra-arguments
+            '("send" "--quiet" "-t" "-C" (if (string-match-p "ucla" from)
+                                             "~/Mail/School"
+                                           "~/Mail/Main")))))
+  (add-hook 'message-send-hook #'disciple/alter-sendmail-args)
   :custom
   (user-full-name "Michael Lan")
   (user-mail-address "michaellan202@gmail.com")
@@ -520,7 +532,6 @@
   (message-send-mail-function #'message-send-mail-with-sendmail)
   (notmuch-fcc-dirs nil)
   (sendmail-program (expand-file-name "~/Repositories/lieer/venv/bin/gmi"))
-  ;; FIXME: this doesn't work
   (message-sendmail-extra-arguments '("send" "--quiet" "-t" "-C" "~/Mail/Main")))
 
 
