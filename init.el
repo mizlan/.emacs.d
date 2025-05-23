@@ -407,7 +407,9 @@
 (use-package gcmh
   :ensure t
   :config
-  (gcmh-mode 1))
+  (gcmh-mode 1)
+  :custom
+  (gcmh-verbose t))
 
 (use-package dtrt-indent
   :ensure t)
