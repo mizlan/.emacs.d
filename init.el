@@ -388,6 +388,9 @@
 (use-package ox-gfm
   :ensure t)
 
+(use-package ess
+  :ensure t)
+
 (use-package org-modern
   :ensure t
   :after org
