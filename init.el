@@ -353,6 +353,11 @@
   :custom
   (diff-hl-draw-borders nil))
 
+(use-package auctex
+  :ensure ( :host github
+            :repo "emacsmirror/auctex"
+            :branch "master"))
+
 (use-package org
   :ensure (org :repo "https://code.tecosaur.net/tec/org-mode.git/"
                 :branch "dev")
@@ -367,6 +372,7 @@
                                (append org-babel-load-languages
                                        '((python . t)
                                          (R . t))))
+  (add-hook 'org-babel-after-execute-hook #'org-redisplay-inline-images)
   :custom
   (org-log-done 'time)
   (org-hide-emphasis-markers t)
@@ -399,6 +405,17 @@
   :ensure t
   :config
   (gcmh-mode 1))
+(use-package apheleia
+  :ensure t
+  :config
+  ;; support match-case
+  (setf (alist-get 'black apheleia-formatters)
+        '("black" "--target-version" "py310" "-"))
+  ;; /opt/homebrew/bin has lower PATH priority than
+  ;; /Library/Tex/texbin but we would like to use the latexindent
+  ;; installed via homebrew to avoid perl errors
+  (setf (alist-get 'latexindent apheleia-formatters)
+        '("/opt/homebrew/bin/latexindent" "--logfile=/dev/null")))
 
 (use-package copilot
   :ensure ( :host github
