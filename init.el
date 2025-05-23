@@ -98,7 +98,7 @@
   (backup-directory-alist '(("." . "~/emacsbackups")))
   (dired-auto-revert-buffer t)
   (enable-recursive-minibuffers t)
-  (split-width-threshold 80)
+  (split-width-threshold 120)
 
   (ring-bell-function 'ignore)
   (search-whitespace-regexp ".*?")
