@@ -66,9 +66,22 @@
   (interactive)
   (setq show-trailing-whitespace t))
 
+(defun disciple/smooth-scroll (amt)
+  "Scroll smoothly"
+  (interactive)
+  (pixel-scroll-precision-interpolate amt nil 1))
+(defun disciple/smooth-scroll-up ()
+  (interactive)
+  (disciple/smooth-scroll (window-text-height nil t)))
+(defun disciple/smooth-scroll-down ()
+  (interactive)
+  (disciple/smooth-scroll (- (window-text-height nil t))))
+
 (use-package emacs
   :ensure nil
-
+  :bind
+  (("C-v" . #'disciple/smooth-scroll-down)
+   ("M-v" . #'disciple/smooth-scroll-up))
   :config
   (tool-bar-mode -1)
   (toggle-scroll-bar -1)
@@ -164,7 +177,11 @@
    ("C-c l" . #'consult-line)
    ("C-c ," . #'consult-buffer)
    ("C-c s" . #'consult-ripgrep)
-   ("C-c r" . #'consult-recent-file))
+   ("C-c r" . #'consult-recent-file)
+   ("C-c p" . #'consult-project-buffer)
+   :map minibuffer-local-map
+   ("M-s" . consult-history)
+   ("M-r" . consult-history))
   :custom
   (xref-show-xrefs-function #'consult-xref)
   (xref-show-definitions-function #'consult-xref))
@@ -395,7 +412,9 @@
   :ensure t
   :after org
   :config
-  (global-org-modern-mode))
+  (global-org-modern-mode)
+  :custom
+  (org-modern-star 'replace))
 
 (use-package olivetti
   :ensure t
