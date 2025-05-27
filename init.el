@@ -213,8 +213,10 @@
   :bind (("C-." . embark-act)
 	 ("M-." . embark-dwim))
   :config
-  ;; TODO don't confirm kill-buffer in switch-buffer
-  (setq embark-quit-after-action nil))
+  (setopt embark-pre-action-hooks
+          (assq-delete-all 'kill-buffer embark-pre-action-hooks))
+  :custom
+  (embark-quit-after-action nil))
 
 (use-package embark-consult
   :ensure t
