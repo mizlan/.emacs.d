@@ -550,7 +550,7 @@
 		  (message-narrow-to-headers-or-head)
 		  (message-fetch-field "From"))))
       (setq message-sendmail-extra-arguments
-            '("send" "--quiet" "-t" "-C" (if (string-match-p "ucla" from)
+            `("send" "--quiet" "-t" "-C" ,(if (string-match-p "ucla" from)
                                              "~/Mail/School"
                                            "~/Mail/Main")))))
   (add-hook 'message-send-hook #'disciple/alter-sendmail-args)
