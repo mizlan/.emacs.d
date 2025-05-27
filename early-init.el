@@ -1,3 +1,6 @@
+;; ref: https://github.com/emacscollective/auto-compile?tab=readme-ov-file#setup
+(setq load-prefer-newer t)
+
 ;; ref: https://github.com/progfolio/elpaca
 (setq package-enable-at-startup nil)
 
