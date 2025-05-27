@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: Python session
+# key: P;
+# --
+
+#+begin_src python :session
+$0
+#+end_src

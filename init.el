@@ -375,6 +375,9 @@
             :repo "emacsmirror/auctex"
             :branch "master"))
 
+(use-package yasnippet
+  :ensure t)
+
 (use-package org
   :ensure (org :repo "https://code.tecosaur.net/tec/org-mode.git/"
                 :branch "dev")

@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: Python Session Image
+# key: Pi;
+# --
+
+#+begin_src python :session :results graphics file output :file ${1:filename}
+$0
+#+end_src
