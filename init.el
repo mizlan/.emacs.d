@@ -232,7 +232,9 @@
   :ensure t)
 
 (use-package expand-region
-  :ensure t)
+  :ensure t
+  :custom
+  (expand-region-contract-fast-key "z"))
 
 (use-package embrace
   :ensure t)
