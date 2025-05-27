@@ -153,6 +153,9 @@
   :custom
   (which-key-idle-delay 0.2))
 
+(use-package bufler
+  :ensure t)
+
 (use-package goto-last-change
   :ensure t
   :bind ("C-;" . goto-last-change))
