@@ -80,8 +80,8 @@
 (use-package emacs
   :ensure nil
   :bind
-  (("C-v" . #'disciple/smooth-scroll-down)
-   ("M-v" . #'disciple/smooth-scroll-up))
+  (("C-v" . disciple/smooth-scroll-down)
+   ("M-v" . disciple/smooth-scroll-up))
   :config
   (tool-bar-mode -1)
   (toggle-scroll-bar -1)
@@ -175,13 +175,15 @@
 (use-package consult
   :ensure t
   :bind
-  (("C-c i" . #'consult-imenu)
-   ("C-c I" . #'consult-outline)
-   ("C-c l" . #'consult-line)
-   ("C-c ," . #'consult-buffer)
-   ("C-c s" . #'consult-ripgrep)
-   ("C-c r" . #'consult-recent-file)
-   ("C-c p" . #'consult-project-buffer)
+  (("C-c i" . consult-imenu)
+   ("C-c I" . consult-outline)
+   ("C-c b s" . consult-line)
+   ("C-c ," . consult-buffer)
+   ("C-c p s" . consult-ripgrep)
+   ("C-c t t" . consult-theme)
+   ("C-c p F" . consult-fd)
+   ("C-c r" . consult-recent-file)
+   ("C-c p b" . consult-project-buffer)
    :map minibuffer-local-map
    ("M-s" . consult-history)
    ("M-r" . consult-history))
@@ -355,7 +357,7 @@
 
 (use-package magit
   :ensure t
-  :bind ("C-c b" . magit-blame)
+  :bind ("C-c b b" . magit-blame)
   :config
   (add-to-list 'magit-blame-styles
 	       '(margin
