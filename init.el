@@ -443,7 +443,9 @@
   (gcmh-verbose t))
 
 (use-package dtrt-indent
-  :ensure t)
+  :ensure t
+  :config
+  (dtrt-indent-global-mode))
 
 (use-package apheleia
   :ensure t
@@ -504,7 +506,9 @@
   :ensure t
   :custom
   (proof-splash-enable nil)
-  (proof-three-window-mode-policy 'hybrid))
+  (proof-three-window-mode-policy 'hybrid)
+  (proof-follow-mode 'followdown)
+  (proof-script-fly-past-comments t))
 
 (use-package opam-switch-mode
   :ensure t
