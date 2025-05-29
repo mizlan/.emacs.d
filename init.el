@@ -560,6 +560,17 @@
                                              "~/Mail/School"
                                            "~/Mail/Main")))))
   (add-hook 'message-send-hook #'disciple/alter-sendmail-args)
+
+  (defun disciple/notmuch-search-from-same-sender ()
+    "Search for other emails from the same sender"
+    (interactive)
+    ;; FIXME: brittle implementation only using string author,
+    ;; and doesnt work with multiple authors in the thread
+    (let ((sender (plist-get (notmuch-search-get-result) :authors)))
+      (notmuch-search (concat "from:\"" sender "\"") nil t)))
+
+  (define-key notmuch-search-mode-map (kbd "C-c C-c") #'disciple/notmuch-search-from-same-sender)
+
   :custom
   (user-full-name "Michael Lan")
   (user-mail-address "michaellan202@gmail.com")
