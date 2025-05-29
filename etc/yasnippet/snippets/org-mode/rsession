@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: R session
-# key: R_
+# key: R;
 # --
 
 #+begin_src R :session
