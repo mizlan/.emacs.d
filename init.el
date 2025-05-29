@@ -557,8 +557,8 @@
 		  (message-fetch-field "From"))))
       (setq message-sendmail-extra-arguments
             `("send" "--quiet" "-t" "-C" ,(if (string-match-p "ucla" from)
-                                             "~/Mail/School"
-                                           "~/Mail/Main")))))
+                                              "~/Mail/School"
+                                            "~/Mail/Main")))))
   (add-hook 'message-send-hook #'disciple/alter-sendmail-args)
 
   (defun disciple/notmuch-search-from-same-sender ()
