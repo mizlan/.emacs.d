@@ -102,6 +102,7 @@
   (add-hook 'text-mode-hook #'disciple/show-trailing-whitespace)
 
   (set-frame-font "ZetBrains Mono-16" nil t)
+  (add-to-list 'default-frame-alist '(font . "ZetBrains Mono-16"))
   (require-theme 'modus-themes)
   (modus-themes-load-theme 'modus-operandi)
 
@@ -358,6 +359,7 @@
 (use-package magit
   :ensure t
   :bind ("C-c b b" . magit-blame)
+  (add-hook 'git-commit-setup-hook #'meow-insert)
   :config
   (add-to-list 'magit-blame-styles
 	       '(margin
@@ -385,7 +387,9 @@
             :branch "master"))
 
 (use-package yasnippet
-  :ensure t)
+  :ensure t
+  :config
+  (yas-global-mode))
 
 (use-package org
   :ensure (org :repo "https://code.tecosaur.net/tec/org-mode.git/"
