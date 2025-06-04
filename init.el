@@ -121,8 +121,10 @@
   (show-trailing-whitespace t)
   (indent-tabs-mode nil)
 
+  (modus-themes-common-palette-overrides '((fg-region unspecified)))
+
   (modus-operandi-palette-overrides '((bg-region bg-cyan-nuanced)
-                                      (fg-region unspecified)))
+                                      (cursor magenta-intense)))
   (modus-themes-bold-constructs t)
   (modus-themes-italic-constructs nil)
 
@@ -364,7 +366,7 @@
   (add-to-list 'magit-blame-styles
 	       '(margin
 		 (margin-width . 32)
-		 (margin-format . ("%c %C %f"))
+                 (margin-format " %s%f" " %C %a" " %h")
 		 (margin-face . magit-blame-margin)
 		 (margin-body-face . magit-blame-dimmed)
 		 (show-message . t))))
