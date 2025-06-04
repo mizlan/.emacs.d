@@ -395,7 +395,7 @@
 
 (use-package org
   :ensure (org :repo "https://code.tecosaur.net/tec/org-mode.git/"
-                :branch "dev")
+               :branch "dev")
   :bind
   (("C-c c" . org-capture)
    ("C-c a" . org-agenda)
