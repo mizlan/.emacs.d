@@ -45,11 +45,20 @@
 (use-package no-littering
   :ensure t)
 
+(use-package gcmh
+  :ensure t
+  :config
+  (gcmh-mode 1)
+  :custom
+  (gcmh-verbose t))
+
 (elpaca-process-queues)
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(add-hook 'elpaca-after-init-hook (lambda () (load custom-file 'noerror)))
+(add-hook 'after-init-hook (lambda () (load custom-file)))
 
+;; FIXME: Can we use 'use-package''s ':custom-face' field
+;; together with 'modus-themes-with-colors'?
 (defun disciple/modus-themes-custom-set-faces (&rest _)
   (modus-themes-with-colors
     (custom-set-faces
@@ -61,34 +70,33 @@
          :foreground unspecified
          :extend nil))))))
 
-(defun disciple/show-trailing-whitespace ()
+(defun disciple/show-trailing-whitespace-if-writable ()
   "Enable highlighting of trailing whitespace"
   (interactive)
-  (setq show-trailing-whitespace t))
+  (unless buffer-read-only
+    (setq show-trailing-whitespace t)))
 
 (defun disciple/smooth-scroll (amt)
   "Scroll smoothly"
   (interactive)
   (pixel-scroll-precision-interpolate amt nil 1))
+
 (defun disciple/smooth-scroll-up ()
   (interactive)
   (disciple/smooth-scroll (window-text-height nil t)))
+
 (defun disciple/smooth-scroll-down ()
   (interactive)
   (disciple/smooth-scroll (- (window-text-height nil t))))
 
 (use-package emacs
   :ensure nil
-  :bind
-  (("C-v" . disciple/smooth-scroll-down)
-   ("M-v" . disciple/smooth-scroll-up))
   :config
   (tool-bar-mode -1)
   (toggle-scroll-bar -1)
   (menu-bar-mode -1)
 
   (pixel-scroll-precision-mode 1)
-  (savehist-mode 1)
 
   (let ((treesit-path (no-littering-expand-var-file-name "tree-sitter")))
     (setq treesit--install-language-grammar-out-dir-history (list treesit-path))
@@ -97,9 +105,8 @@
   (add-hook 'modus-themes-after-load-theme-hook
 	    #'disciple/modus-themes-custom-set-faces)
 
-  (add-hook 'prog-mode-hook #'disciple/show-trailing-whitespace)
-  (remove-hook 'prog-mode-hook #'disciple/show-trailing-whitespace)
-  (add-hook 'text-mode-hook #'disciple/show-trailing-whitespace)
+  (add-hook 'prog-mode-hook #'disciple/show-trailing-whitespace-if-writable)
+  (add-hook 'text-mode-hook #'disciple/show-trailing-whitespace-if-writable)
 
   (set-frame-font "ZetBrains Mono-16" nil t)
   (add-to-list 'default-frame-alist '(font . "ZetBrains Mono-16"))
@@ -107,7 +114,9 @@
   (modus-themes-load-theme 'modus-operandi)
 
   :custom
+  ;; the graphical frame need not be a multiple of character width/height
   (frame-resize-pixelwise t)
+  ;; Hide the initial splash screen
   (inhibit-splash-screen t)
   (backup-directory-alist '(("." . "~/emacsbackups")))
   (dired-auto-revert-buffer t)
@@ -118,19 +127,29 @@
   (search-whitespace-regexp ".*?")
   (show-paren-delay 0)
 
-  (show-trailing-whitespace t)
   (indent-tabs-mode nil)
+
+  ;; Never (soft) wrap lines by default
+  (truncate-lines t)
+  (truncate-partial-width-windows nil)
+
+  (sentence-end-double-space nil)
 
   (modus-themes-common-palette-overrides '((fg-region unspecified)))
 
-  (modus-operandi-palette-overrides '((bg-region bg-cyan-nuanced)
-                                      (cursor magenta-intense)))
+  ;; (modus-operandi-palette-overrides '((bg-region bg-cyan-nuanced)
+  ;;                                     (cursor magenta-intense)))
   (modus-themes-bold-constructs t)
   (modus-themes-italic-constructs nil)
 
   (mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil)))
   (mouse-wheel-progressive-speed nil)
   (scroll-conservatively 101))
+
+(use-package esup
+  :ensure t
+  :custom
+  (esup-depth 0))
 
 (use-package minions
   :ensure t
@@ -141,12 +160,17 @@
   :ensure nil
   :bind ("C-c K" . kmacro-end-or-call-macro))
 
+(use-package savehist
+  :ensure nil
+  :config
+  (savehist-mode 1))
+
 (use-package recentf
   :ensure nil
   :config
   (recentf-mode 1)
   :custom
-  (recentf-max-saved-items 500)
+  (recentf-max-saved-items 50)
   (recentf-max-menu-items 50))
 
 (use-package which-key
@@ -157,6 +181,9 @@
   (which-key-idle-delay 0.2))
 
 (use-package bufler
+  :ensure t)
+
+(use-package vundo
   :ensure t)
 
 (use-package goto-last-change
@@ -242,6 +269,15 @@
   :ensure t
   :custom
   (expand-region-contract-fast-key "z"))
+
+(use-package circadian
+  :ensure t
+  :config
+  (setq calendar-latitude 34.052235)
+  (setq calendar-longitude -118.243683)
+  (setq circadian-themes '((:sunrise . modus-operandi)
+                           (:sunset  . modus-vivendi)))
+  (circadian-setup))
 
 (use-package embrace
   :ensure t)
@@ -341,17 +377,6 @@
   (meow-thing-register 'angle
                        '(pair ("<") (">"))
                        '(pair ("<") (">")))
-
-  (setq meow-char-thing-table
-        '((?f . round)
-          (?d . square)
-          (?s . curly)
-          (?a . angle)
-          (?r . string)
-          (?v . paragraph)
-          (?c . line)
-          (?x . buffer)))
-
   (meow-setup)
   (meow-global-mode 1)
   :custom
@@ -360,7 +385,9 @@
 
 (use-package magit
   :ensure t
-  :bind ("C-c b b" . magit-blame)
+  :bind
+  (("C-c g" . magit-dispatch)
+   ("C-c f" . magit-file-dispatch))
   :config
   (add-hook 'git-commit-setup-hook #'meow-insert)
   (add-to-list 'magit-blame-styles
@@ -374,6 +401,11 @@
 ;; declare transient separately to get an up-to-date version
 (use-package transient
   :ensure t)
+
+(use-package magit-todos
+  :ensure t
+  :config
+  (magit-todos-mode))
 
 (use-package diff-hl
   :ensure t
@@ -393,6 +425,9 @@
   :config
   (yas-global-mode))
 
+(use-package yasnippet-snippets
+  :ensure t)
+
 (use-package org
   :ensure (org :repo "https://code.tecosaur.net/tec/org-mode.git/"
                :branch "dev")
@@ -401,7 +436,8 @@
    ("C-c a" . org-agenda)
    :map org-mode-map
    ("C-c i" . consult-org-heading))
-  :hook (org-mode . org-indent-mode)
+  :hook ((org-mode . org-indent-mode)
+         (org-mode . org-latex-preview-auto-mode))
   :config
   (org-babel-do-load-languages 'org-babel-load-languages
                                (append org-babel-load-languages
@@ -412,7 +448,6 @@
   (org-log-done 'time)
   (org-hide-emphasis-markers t)
   (org-directory "~/org/")
-  (org-agenda-files '("~/org/"))
   (org-capture-templates
    '(("j" "Journal entry" entry
       (file+headline "journal.org" "Journalbob")
@@ -420,10 +455,18 @@
   (org-confirm-babel-evaluate nil)
   (org-src-preserve-indentation t))
 
-(use-package ox-gfm
-  :ensure t)
+(use-package org-agenda
+  :ensure nil
+  :after org
+  :custom
+  (org-agenda-span 10)
+  (org-agenda-start-day "-3d")
+  (org-agenda-start-on-weekday nil))
 
-(use-package ess
+;; Store links to notmuch threads and notmuch searches in org-mode.
+;; Use `M-x org-store-link' while browsing notmuch to save the
+;; location in the ring.
+(use-package ol-notmuch
   :ensure t)
 
 (use-package org-modern
@@ -441,17 +484,11 @@
   :custom
   (olivetti-style 'fancy))
 
-(use-package gcmh
-  :ensure t
-  :config
-  (gcmh-mode 1)
-  :custom
-  (gcmh-verbose t))
-
 (use-package dtrt-indent
   :ensure t
   :config
-  (dtrt-indent-global-mode))
+  ;; (dtrt-indent-global-mode)
+  )
 
 (use-package apheleia
   :ensure t
@@ -465,15 +502,15 @@
   (setf (alist-get 'latexindent apheleia-formatters)
         '("/opt/homebrew/bin/latexindent" "--logfile=/dev/null")))
 
-(use-package copilot
-  :ensure ( :host github
-	    :repo "copilot-emacs/copilot.el")
-  :bind ( :map copilot-mode-map
-          ("C-," . copilot-complete)
-          :map copilot-completion-map
-	  ("TAB" . copilot-accept-completion-by-word))
-  :custom
-  (copilot-idle-delay nil))
+;; (use-package copilot
+;;   :ensure ( :host github
+;; 	    :repo "copilot-emacs/copilot.el")
+;;   :bind ( :map copilot-mode-map
+;;           ("C-," . copilot-complete)
+;;           :map copilot-completion-map
+;; 	  ("TAB" . copilot-accept-completion-by-word))
+;;   :custom
+;;   (copilot-idle-delay nil))
 
 (use-package markdown-mode
   :ensure t)
@@ -492,9 +529,9 @@
     (with-eval-after-load 'typst-ts-mode
       (add-to-list 'eglot-server-programs
 		   '(typst-ts-mode "tinymist"))))
-
-  (custom-set-faces '(typst-ts-superscript-face ((t :height 1.0))))
-  (custom-set-faces '(typst-ts-subscript-face ((t :height 1.0))))
+  :custom-face
+  (typst-ts-superscript-face ((t :height 1.0)))
+  (typst-ts-subscript-face ((t :height 1.0)))
   :custom
   (typst-ts-math-script-display '((raise 0) . (raise 0))))
 
@@ -529,7 +566,7 @@
 (defun disciple/notmuch ()
   "Show the notmuch inbox"
   (interactive)
-  (notmuch-search "tag:inbox not tag:trash"))
+  (notmuch-search "tag:inbox"))
 
 (use-package keycast
   :ensure t
@@ -541,12 +578,12 @@
   :commands notmuch-search
   :bind
   (("C-c m" . disciple/notmuch)
-
    :map notmuch-search-mode-map
    ("d" . disciple/notmuch-delete)
-   ("." . disciple/notmuch-repeat-tag))
-
+   ("." . disciple/notmuch-repeat-tag)
+   ("C-c C-c" . disciple/notmuch-search-from-same-sender))
   :config
+
   ;; Allow multiple address completions in buffer.
   ;;
   ;; "Some bug with notmuch address completion due to having notmuch-address-expand-name
@@ -567,6 +604,23 @@
                                             "~/Mail/Main")))))
   (add-hook 'message-send-hook #'disciple/alter-sendmail-args)
 
+  (defun disciple/notmuch-delete ()
+    "Add deletion tags and remove common tags"
+    (interactive)
+    (notmuch-search-tag '("-inbox" "-important" "-flagged" "+trash")))
+
+  ;; credit to inwit, ref: https://www.mail-archive.com/notmuch@notmuchmail.org/msg52527.html
+  (defun disciple/notmuch-repeat-tag ()
+    "Repeat the last tagging operation"
+    (interactive)
+    (notmuch-search-tag
+     (split-string-and-unquote (car notmuch-read-tag-changes-history))))
+
+  (defun disciple/sync-mail ()
+    "Use lieer to sync mail"
+    (interactive)
+    (compile "cd ~/Mail && ./syncmail"))
+
   (defun disciple/notmuch-search-from-same-sender ()
     "Search for other emails from the same sender"
     (interactive)
@@ -574,8 +628,6 @@
     ;; and doesnt work with multiple authors in the thread
     (let ((sender (plist-get (notmuch-search-get-result) :authors)))
       (notmuch-search (concat "from:\"" sender "\"") nil t)))
-
-  (define-key notmuch-search-mode-map (kbd "C-c C-c") #'disciple/notmuch-search-from-same-sender)
 
   :custom
   (user-full-name "Michael Lan")
@@ -594,24 +646,6 @@
   (notmuch-fcc-dirs nil)
   (sendmail-program (expand-file-name "~/Repositories/lieer/venv/bin/gmi"))
   (message-sendmail-extra-arguments '("send" "--quiet" "-t" "-C" "~/Mail/Main")))
-
-
-(defun disciple/notmuch-delete ()
-  "Add deletion tags and remove common tags"
-  (interactive)
-  (notmuch-search-tag '("-inbox" "-important" "-flagged" "+trash")))
-
-;; credit to inwit, ref: https://www.mail-archive.com/notmuch@notmuchmail.org/msg52527.html
-(defun disciple/notmuch-repeat-tag ()
-  "Repeat the last tagging operation"
-  (interactive)
-  (notmuch-search-tag
-   (split-string-and-unquote (car notmuch-read-tag-changes-history))))
-
-(defun disciple/sync-mail ()
-  "Use lieer to sync mail"
-  (interactive)
-  (compile "cd ~/Mail && ./syncmail"))
 
 ;; Pretty cool to use this in multi-cursor workflows, not sure how
 ;; much other utility it has...
