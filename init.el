@@ -111,7 +111,7 @@
   (set-frame-font "ZetBrains Mono-16" nil t)
   (add-to-list 'default-frame-alist '(font . "ZetBrains Mono-16"))
   (require-theme 'modus-themes)
-  (modus-themes-load-theme 'modus-operandi)
+  (modus-themes-load-theme 'modus-operandi-tinted)
 
   :custom
   ;; the graphical frame need not be a multiple of character width/height
@@ -137,8 +137,6 @@
 
   (modus-themes-common-palette-overrides '((fg-region unspecified)))
 
-  ;; (modus-operandi-palette-overrides '((bg-region bg-cyan-nuanced)
-  ;;                                     (cursor magenta-intense)))
   (modus-themes-bold-constructs t)
   (modus-themes-italic-constructs nil)
 
@@ -207,7 +205,7 @@
   :bind
   (("C-c i" . consult-imenu)
    ("C-c I" . consult-outline)
-   ("C-c b s" . consult-line)
+   ("C-c f s" . consult-line)
    ("C-c ," . consult-buffer)
    ("C-c p s" . consult-ripgrep)
    ("C-c t t" . consult-theme)
@@ -257,7 +255,9 @@
 
 (use-package corfu
   :ensure t
-  :config
+  :bind
+  (:map corfu-map ("SPC" . corfu-insert-separator))
+  :init
   (global-corfu-mode)
   :custom
   (tab-always-indent 'complete))
@@ -386,8 +386,8 @@
 (use-package magit
   :ensure t
   :bind
-  (("C-c g" . magit-dispatch)
-   ("C-c f" . magit-file-dispatch))
+  (("C-c v g" . magit-dispatch)
+   ("C-c v f" . magit-file-dispatch))
   :config
   (add-hook 'git-commit-setup-hook #'meow-insert)
   (add-to-list 'magit-blame-styles
@@ -484,9 +484,25 @@
   :custom
   (olivetti-style 'fancy))
 
+(use-package popper
+  :ensure t
+  :bind (("C-`"   . popper-toggle)
+         ("M-`"   . popper-cycle)
+         ("C-M-`" . popper-toggle-type))
+  :init
+  (setq popper-reference-buffers
+        '("\\*Messages\\*"
+          "Output\\*$"
+          "\\*Async Shell Command\\*"
+          help-mode
+          compilation-mode))
+  (popper-mode +1)
+  (popper-echo-mode +1))
+
 (use-package dtrt-indent
   :ensure t
   :config
+  ;; unfortunately really slow on some filetypes
   ;; (dtrt-indent-global-mode)
   )
 
