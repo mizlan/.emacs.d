@@ -203,8 +203,8 @@
 (use-package consult
   :ensure t
   :bind
-  (("C-c i" . consult-imenu)
-   ("C-c I" . consult-outline)
+  (("C-c f i" . consult-imenu)
+   ("C-c f I" . consult-outline)
    ("C-c f s" . consult-line)
    ("C-c ," . consult-buffer)
    ("C-c p s" . consult-ripgrep)
@@ -227,7 +227,7 @@
 (use-package orderless
   :ensure t
   :custom
-  (completion-styles '(orderless basic))
+  (completion-styles '(orderless basic partial-completion))
   (completion-category-overrides '((file (styles basic partial-completion)))))
 
 (use-package everforest-theme
@@ -406,6 +406,11 @@
   :ensure t
   :config
   (magit-todos-mode))
+
+(use-package jj-mode
+  :ensure (jj-mode
+           :host github
+           :repo "bolivier/jj-mode.el"))
 
 (use-package diff-hl
   :ensure t
