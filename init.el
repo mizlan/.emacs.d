@@ -98,12 +98,12 @@
 
   (pixel-scroll-precision-mode 1)
 
-  (let ((treesit-path (no-littering-expand-var-file-name "tree-sitter")))
+  (let ((treesit-path (no-littering-expand-var-file-name "tree-sitter"))) ; FIXME why do we need this?
     (setq treesit--install-language-grammar-out-dir-history (list treesit-path))
     (setq treesit-extra-load-path (list treesit-path)))
 
   (add-hook 'modus-themes-after-load-theme-hook
-	    #'disciple/modus-themes-custom-set-faces)
+            #'disciple/modus-themes-custom-set-faces)
 
   (add-hook 'prog-mode-hook #'disciple/show-trailing-whitespace-if-writable)
   (add-hook 'text-mode-hook #'disciple/show-trailing-whitespace-if-writable)
@@ -119,7 +119,6 @@
   ;; Hide the initial splash screen
   (inhibit-splash-screen t)
   (backup-directory-alist '(("." . "~/emacsbackups")))
-  (dired-auto-revert-buffer t)
   (enable-recursive-minibuffers t)
   (split-width-threshold 120)
 
@@ -143,6 +142,13 @@
   (mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil)))
   (mouse-wheel-progressive-speed nil)
   (scroll-conservatively 101))
+
+(use-package dired
+  :ensure nil
+  :hook
+  (dired-mode . dired-omit-mode)
+  :custom
+  (dired-auto-revert-buffer t))
 
 (use-package esup
   :ensure t
@@ -207,11 +213,11 @@
    ("C-c f I" . consult-outline)
    ("C-c f s" . consult-line)
    ("C-c ," . consult-buffer)
-   ("C-c p s" . consult-ripgrep)
    ("C-c t t" . consult-theme)
-   ("C-c p F" . consult-fd)
    ("C-c r" . consult-recent-file)
+   ("C-c p s" . consult-ripgrep)
    ("C-c p b" . consult-project-buffer)
+   ("C-c p F" . consult-fd)
    :map minibuffer-local-map
    ("M-s" . consult-history)
    ("M-r" . consult-history))
@@ -241,7 +247,7 @@
 (use-package embark
   :ensure t
   :bind (("C-." . embark-act)
-	 ("M-." . embark-dwim))
+         ("M-." . embark-dwim))
   :config
   (setopt embark-pre-action-hooks
           (assq-delete-all 'kill-buffer embark-pre-action-hooks))
@@ -256,6 +262,8 @@
 (use-package corfu
   :ensure t
   :bind
+  ;; When the completion popup is open, 'SPC' enables orderless
+  ;; completion (with 'SPC' as the separator)
   (:map corfu-map ("SPC" . corfu-insert-separator))
   :init
   (global-corfu-mode)
@@ -269,15 +277,6 @@
   :ensure t
   :custom
   (expand-region-contract-fast-key "z"))
-
-(use-package circadian
-  :ensure t
-  :config
-  (setq calendar-latitude 34.052235)
-  (setq calendar-longitude -118.243683)
-  (setq circadian-themes '((:sunrise . modus-operandi)
-                           (:sunset  . modus-vivendi)))
-  (circadian-setup))
 
 (use-package embrace
   :ensure t)
@@ -301,7 +300,8 @@
    '("9" . meow-digit-argument)
    '("0" . meow-digit-argument)
    '("/" . meow-keypad-describe-key)
-   '("?" . meow-cheatsheet))
+   '("?" . meow-cheatsheet)
+   '(";" . save-buffer))
   (meow-normal-define-key
    '("0" . meow-expand-0)
    '("9" . meow-expand-9)
@@ -391,12 +391,12 @@
   :config
   (add-hook 'git-commit-setup-hook #'meow-insert)
   (add-to-list 'magit-blame-styles
-	       '(margin
-		 (margin-width . 32)
+               '(margin
+                 (margin-width . 32)
                  (margin-format " %s%f" " %C %a" " %h")
-		 (margin-face . magit-blame-margin)
-		 (margin-body-face . magit-blame-dimmed)
-		 (show-message . t))))
+                 (margin-face . magit-blame-margin)
+                 (margin-body-face . magit-blame-dimmed)
+                 (show-message . t))))
 
 ;; declare transient separately to get an up-to-date version
 (use-package transient
@@ -429,9 +429,6 @@
   :ensure t
   :config
   (yas-global-mode))
-
-(use-package yasnippet-snippets
-  :ensure t)
 
 (use-package org
   :ensure (org :repo "https://code.tecosaur.net/tec/org-mode.git/"
@@ -525,11 +522,11 @@
 
 ;; (use-package copilot
 ;;   :ensure ( :host github
-;; 	    :repo "copilot-emacs/copilot.el")
+;;             :repo "copilot-emacs/copilot.el")
 ;;   :bind ( :map copilot-mode-map
 ;;           ("C-," . copilot-complete)
 ;;           :map copilot-completion-map
-;; 	  ("TAB" . copilot-accept-completion-by-word))
+;;           ("TAB" . copilot-accept-completion-by-word))
 ;;   :custom
 ;;   (copilot-idle-delay nil))
 
@@ -541,7 +538,7 @@
 
 (use-package typst-preview
   :ensure ( :host github
-	    :repo "havarddj/typst-preview.el"))
+            :repo "havarddj/typst-preview.el"))
 
 (use-package typst-ts-mode
   :ensure t
@@ -549,7 +546,7 @@
   (with-eval-after-load 'eglot
     (with-eval-after-load 'typst-ts-mode
       (add-to-list 'eglot-server-programs
-		   '(typst-ts-mode "tinymist"))))
+                   '(typst-ts-mode "tinymist"))))
   :custom-face
   (typst-ts-superscript-face ((t :height 1.0)))
   (typst-ts-subscript-face ((t :height 1.0)))
@@ -557,7 +554,12 @@
   (typst-ts-math-script-display '((raise 0) . (raise 0))))
 
 (use-package tuareg
-  :ensure t)
+  :ensure t
+  :init
+  ;; take advantage of Emacs utilities from opam packages
+  (let ((opam-share (ignore-errors (car (process-lines "opam" "var" "share")))))
+    (when (and opam-share (file-directory-p opam-share))
+      (add-to-list 'load-path (expand-file-name "emacs/site-lisp" opam-share)))))
 
 (use-package ocaml-eglot
   :ensure t
@@ -579,10 +581,10 @@
   :hook
   ((coq-mode tuareg-mode) . opam-switch-mode))
 
-;; (use-package merlin
-;;   :ensure t
-;;   :config
-;;   (add-hook 'tuareg-mode-hook #'merlin-mode))
+(use-package merlin
+  :ensure t
+  :config
+  (add-hook 'tuareg-mode-hook #'merlin-mode))
 
 (defun disciple/notmuch ()
   "Show the notmuch inbox"
@@ -617,8 +619,8 @@
   (defun disciple/alter-sendmail-args ()
     "Direct lieer to send via either personal or school email heuristically using the 'From:' field"
     (let ((from (save-restriction
-		  (message-narrow-to-headers-or-head)
-		  (message-fetch-field "From"))))
+                  (message-narrow-to-headers-or-head)
+                  (message-fetch-field "From"))))
       (setq message-sendmail-extra-arguments
             `("send" "--quiet" "-t" "-C" ,(if (string-match-p "ucla" from)
                                               "~/Mail/School"
@@ -680,3 +682,6 @@
     (insert (format "%S" value))))
 
 (global-set-key (kbd "C-x C-y") #'disciple/replace-last-sexp)
+
+(global-set-key (kbd "C-c d n") #'flymake-goto-next-error)
+(global-set-key (kbd "C-c d p") #'flymake-goto-prev-error)
