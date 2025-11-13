@@ -232,7 +232,7 @@
    ("C-c f s" . consult-line)
    ("C-c ," . consult-buffer)
    ("C-c t t" . consult-theme)
-   ("C-c r" . consult-recent-file)
+   ("C-c r r" . consult-recent-file)
    ("C-c p s" . consult-ripgrep)
    ("C-c p b" . consult-project-buffer)
    ("C-c p F" . consult-fd)
@@ -481,7 +481,6 @@
                :branch "dev")
   :bind
   (("C-c c" . org-capture)
-   ("C-c a" . org-agenda)
    :map org-mode-map
    ("C-c i" . consult-org-heading))
   :hook ((org-mode . org-indent-mode)
@@ -506,7 +505,10 @@
 (use-package org-agenda
   :ensure nil
   :after org
+  :bind
+  ("C-c a" . org-agenda)
   :custom
+  (org-agenda-files "~/org/org-agenda-files")
   (org-agenda-span 10)
   (org-agenda-start-day "-3d")
   (org-agenda-start-on-weekday nil))
@@ -744,9 +746,16 @@
   :hook
   (eglot-managed-mode . disciple/eglot-disable-inlay-hints-mode)
   :bind
-  ("M-s-." . eglot-find-typeDefinition))
+  (("M-s-." . eglot-find-typeDefinition)
+   ("C-c r n" . eglot-rename)
+   ("C-c r a" . eglot-code-actions)))
 
 (use-package hl-todo
   :ensure t
   :init
   (global-hl-todo-mode))
+
+(use-package unfill
+  :ensure t
+  :bind
+  ("M-q" . unfill-toggle))
