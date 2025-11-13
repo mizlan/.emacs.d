@@ -108,10 +108,8 @@
   (add-hook 'prog-mode-hook #'disciple/show-trailing-whitespace-if-writable)
   (add-hook 'text-mode-hook #'disciple/show-trailing-whitespace-if-writable)
 
-  (set-frame-font "ZetBrains Mono-16" nil t)
-  (add-to-list 'default-frame-alist '(font . "ZetBrains Mono-16"))
   (require-theme 'modus-themes)
-  (modus-themes-load-theme 'modus-operandi-tinted)
+  (modus-themes-load-theme 'modus-operandi)
 
   :custom
   ;; the graphical frame need not be a multiple of character width/height
@@ -121,6 +119,8 @@
   (backup-directory-alist '(("." . "~/emacsbackups")))
   (enable-recursive-minibuffers t)
   (split-width-threshold 120)
+
+  (confirm-kill-emacs #'y-or-n-p)
 
   (ring-bell-function 'ignore)
   (search-whitespace-regexp ".*?")
@@ -136,19 +136,37 @@
 
   (modus-themes-common-palette-overrides '((fg-region unspecified)))
 
-  (modus-themes-bold-constructs t)
+  (modus-themes-bold-constructs nil)
   (modus-themes-italic-constructs nil)
 
   (mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil)))
   (mouse-wheel-progressive-speed nil)
   (scroll-conservatively 101))
 
+(use-package fontaine
+  :ensure t
+  :init
+  (fontaine-set-preset 'regular)
+  :custom
+  (fontaine-presets
+   '((regular
+      :default-family "ZetBrains Mono"
+      :default-height 180
+      :default-weight light
+      :bold-weight semibold))))
+
 (use-package dired
   :ensure nil
   :hook
   (dired-mode . dired-omit-mode)
   :custom
-  (dired-auto-revert-buffer t))
+  (dired-auto-revert-buffer t)
+  (dired-dwim-target t))
+
+(use-package diredfl
+  :ensure t
+  :init
+  (diredfl-global-mode))
 
 (use-package esup
   :ensure t
@@ -174,8 +192,8 @@
   :config
   (recentf-mode 1)
   :custom
-  (recentf-max-saved-items 50)
-  (recentf-max-menu-items 50))
+  (recentf-max-saved-items 150)
+  (recentf-max-menu-items 150))
 
 (use-package which-key
   :ensure nil
@@ -218,6 +236,7 @@
    ("C-c p s" . consult-ripgrep)
    ("C-c p b" . consult-project-buffer)
    ("C-c p F" . consult-fd)
+   ("C-c b" . consult-bookmark)
    :map minibuffer-local-map
    ("M-s" . consult-history)
    ("M-r" . consult-history))
@@ -396,7 +415,34 @@
                  (margin-format " %s%f" " %C %a" " %h")
                  (margin-face . magit-blame-margin)
                  (margin-body-face . magit-blame-dimmed)
-                 (show-message . t))))
+                 (show-message . t)))
+
+  (defun my/magit-git-review ()
+    "Run `git review -y` in the current Magit repository."
+    (interactive)
+    (let ((default-directory (magit-toplevel)))
+      (magit-run-git "review" "-y")))
+
+  (transient-append-suffix 'magit-push [1 -1]
+    `("g"
+      ,(concat "Push via " (propertize "git-review" 'face 'bold))
+      my/magit-git-review))
+
+  (defun my/magit-git-review (&optional args)
+    "Push using git-review with optional ARGS."
+    (interactive)
+    (magit-run-git "review" args))
+
+  (transient-define-prefix my/magit-git-review-transient ()
+    "Git Review Commands"
+    ["Git Review"
+     ;; Switch: always passes --yes by default
+     ("-y" "Allow submitting more than one patch" "--yes")
+     ;; Execute git-review
+     ("R" "Push via git-review" my/magit-git-review)])
+
+  (with-eval-after-load 'magit
+    (define-key magit-mode-map (kbd "R") 'my/magit-git-review-transient)))
 
 ;; declare transient separately to get an up-to-date version
 (use-package transient
@@ -498,8 +544,8 @@
           "\\*Async Shell Command\\*"
           help-mode
           compilation-mode))
-  (popper-mode +1)
-  (popper-echo-mode +1))
+  (popper-mode 1)
+  (popper-echo-mode 1))
 
 (use-package dtrt-indent
   :ensure t
@@ -685,3 +731,22 @@
 
 (global-set-key (kbd "C-c d n") #'flymake-goto-next-error)
 (global-set-key (kbd "C-c d p") #'flymake-goto-prev-error)
+
+;; ok
+
+;; FIXME: doesn't work
+(defun disciple/eglot-disable-inlay-hints-mode ()
+  (interactive)
+  (eglot-inlay-hints-mode -1))
+
+(use-package eglot
+  :ensure nil
+  :hook
+  (eglot-managed-mode . disciple/eglot-disable-inlay-hints-mode)
+  :bind
+  ("M-s-." . eglot-find-typeDefinition))
+
+(use-package hl-todo
+  :ensure t
+  :init
+  (global-hl-todo-mode))
