@@ -759,7 +759,6 @@
 
 ;; ok
 
-;; FIXME: doesn't work
 (defun disciple/eglot-disable-inlay-hints-mode ()
   (interactive)
   (eglot-inlay-hints-mode -1))
