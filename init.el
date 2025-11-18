@@ -93,7 +93,15 @@
   :ensure nil
   :config
   (tool-bar-mode -1)
-  (toggle-scroll-bar -1)
+
+  (scroll-bar-mode -1)
+  (add-to-list 'default-frame-alist '(ns-use-thin-smoothing . t))
+  (add-to-list 'default-frame-alist '(menu-bar-lines . 0))
+  (add-to-list 'default-frame-alist '(tool-bar-lines . 0))
+  (add-to-list 'default-frame-alist '(vertical-scroll-bars . nil))
+  (add-to-list 'default-frame-alist '(horizontal-scroll-bars . nil))
+  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+
   (menu-bar-mode -1)
 
   (pixel-scroll-precision-mode 1)
@@ -290,7 +298,9 @@
   (tab-always-indent 'complete))
 
 (use-package eldoc-box
-  :ensure t)
+  :ensure t
+  :init
+  (eldoc-box-hover-mode))
 
 (use-package expand-region
   :ensure t
@@ -408,6 +418,8 @@
   (("C-c v g" . magit-dispatch)
    ("C-c v f" . magit-file-dispatch))
   :config
+  ;; Require magit-extras to enable magit as an option in `M-x project-switch-project'
+  (require 'magit-extras)
   (add-hook 'git-commit-setup-hook #'meow-insert)
   (add-to-list 'magit-blame-styles
                '(margin
@@ -478,13 +490,13 @@
 
 (use-package org
   :ensure (org :repo "https://code.tecosaur.net/tec/org-mode.git/"
-               :branch "dev")
+               :branch "release_9.7.32")
   :bind
   (("C-c c" . org-capture)
    :map org-mode-map
    ("C-c i" . consult-org-heading))
   :hook ((org-mode . org-indent-mode)
-         (org-mode . org-latex-preview-auto-mode))
+         (org-mode . org-latex-preview-mode))
   :config
   (org-babel-do-load-languages 'org-babel-load-languages
                                (append org-babel-load-languages
@@ -507,6 +519,12 @@
   :after org
   :bind
   ("C-c a" . org-agenda)
+  :config
+  (add-to-list 'org-agenda-custom-commands
+               '("h" "Consult agenda heading"
+                 (lambda (&optional _arg)
+                   (interactive)
+                   (consult-org-agenda))))
   :custom
   (org-agenda-files "~/org/org-agenda-files")
   (org-agenda-span 10)
@@ -518,6 +536,11 @@
 ;; location in the ring.
 (use-package ol-notmuch
   :ensure t)
+
+(use-package project
+  :ensure nil
+  :custom
+  (project-vc-extra-root-markers '("package.json" "dune-project")))
 
 (use-package org-modern
   :ensure t
