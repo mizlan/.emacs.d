@@ -113,10 +113,21 @@
   (add-hook 'modus-themes-after-load-theme-hook
             #'disciple/modus-themes-custom-set-faces)
 
+  (require-theme 'modus-themes)
+
+  (defun disciple/apply-appearance-theme (appearance)
+    "Load theme, taking current system APPEARANCE into consideration."
+    ;; (interactive "S")
+    (mapc #'disable-theme custom-enabled-themes)
+    (pcase appearance
+      ('light (modus-themes-load-theme 'modus-operandi))
+      ('dark (modus-themes-load-theme 'modus-vivendi))))
+
+  (add-hook 'ns-system-appearance-change-functions #'disciple/apply-appearance-theme)
+
   (add-hook 'prog-mode-hook #'disciple/show-trailing-whitespace-if-writable)
   (add-hook 'text-mode-hook #'disciple/show-trailing-whitespace-if-writable)
 
-  (require-theme 'modus-themes)
   (modus-themes-load-theme 'modus-operandi)
 
   :custom
@@ -161,6 +172,15 @@
       :default-family "ZetBrains Mono"
       :default-height 180
       :default-weight light
+      :bold-weight semibold)
+     (sf
+      :default-family "SF Mono"
+      :default-height 180
+      :default-weight light
+      :bold-weight semibold)
+     (iosevka
+      :default-family "Iosevka Custom"
+      :default-height 180
       :bold-weight semibold))))
 
 (use-package dired
@@ -269,6 +289,15 @@
            :repo "Theory-of-Everything/everforest-emacs"))
 
 (use-package doom-themes
+  :ensure t)
+
+;; (use-package modus-themes
+;;   :ensure t)
+
+;; (use-package ef-themes
+;;   :ensure t)
+
+(use-package doric-themes
   :ensure t)
 
 (use-package embark
@@ -510,7 +539,10 @@
   (org-capture-templates
    '(("j" "Journal entry" entry
       (file+headline "journal.org" "Journalbob")
-      "* %^t journal entry")))
+      "* %^t journal entry")
+     ("c" "Cooking entry" entry
+      (file+headline "cooking.org" "Cookingbob")
+      "* %^t Cooking entry")))
   (org-confirm-babel-evaluate nil)
   (org-src-preserve-indentation t))
 
@@ -591,15 +623,15 @@
   (setf (alist-get 'latexindent apheleia-formatters)
         '("/opt/homebrew/bin/latexindent" "--logfile=/dev/null")))
 
-;; (use-package copilot
-;;   :ensure ( :host github
-;;             :repo "copilot-emacs/copilot.el")
-;;   :bind ( :map copilot-mode-map
-;;           ("C-," . copilot-complete)
-;;           :map copilot-completion-map
-;;           ("TAB" . copilot-accept-completion-by-word))
-;;   :custom
-;;   (copilot-idle-delay nil))
+(use-package copilot
+  :ensure ( :host github
+            :repo "copilot-emacs/copilot.el")
+  :bind ( :map copilot-mode-map
+          ("C-," . copilot-complete)
+          :map copilot-completion-map
+          ("TAB" . copilot-accept-completion-by-word))
+  :custom
+  (copilot-idle-delay nil))
 
 (use-package markdown-mode
   :ensure t)
@@ -624,20 +656,22 @@
   :custom
   (typst-ts-math-script-display '((raise 0) . (raise 0))))
 
+;; take advantage of Emacs utilities from opam packages
+(let ((opam-share (ignore-errors (car (process-lines "opam" "var" "share")))))
+  (when (and opam-share (file-directory-p opam-share))
+    (add-to-list 'load-path (expand-file-name "emacs/site-lisp" opam-share))))
+
 (use-package tuareg
-  :ensure t
-  :init
-  ;; take advantage of Emacs utilities from opam packages
-  (let ((opam-share (ignore-errors (car (process-lines "opam" "var" "share")))))
-    (when (and opam-share (file-directory-p opam-share))
-      (add-to-list 'load-path (expand-file-name "emacs/site-lisp" opam-share)))))
+  :ensure t)
+
+(use-package dune
+  :ensure nil)
 
 (use-package ocaml-eglot
   :ensure t
   :after tuareg
   :hook
-  (tuareg-mode . ocaml-eglot)
-  (ocaml-eglot . eglot-ensure))
+  (tuareg-mode . ocaml-eglot))
 
 (use-package proof-general
   :ensure t
@@ -781,3 +815,20 @@
   :ensure t
   :bind
   ("M-q" . unfill-toggle))
+
+(use-package cmake-ts-mode
+  :ensure nil
+  :init
+  (add-to-list 'auto-mode-alist '("CMakeLists.txt" . cmake-ts-mode)))
+
+(use-package svelte-ts-mode
+  :ensure (:host github :repo "leafOfTree/svelte-ts-mode")
+  :init
+  (add-to-list 'auto-mode-alist '("\\.svelte\\.[a-zA-Z0-9]+\\'" . svelte-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.svelte'" . svelte-ts-mode))
+  :config
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-server-programs
+                 '((svelte-mode svelte-ts-mode) . ("svelteserver" "--stdio")))))
+
+(global-unset-key (kbd "s-t"))
