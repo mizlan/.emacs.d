@@ -191,6 +191,7 @@
   (dired-auto-revert-buffer t)
   (dired-dwim-target t))
 
+;; Add highlighting to dired buffers
 (use-package diredfl
   :ensure t
   :init
@@ -456,34 +457,7 @@
                  (margin-format " %s%f" " %C %a" " %h")
                  (margin-face . magit-blame-margin)
                  (margin-body-face . magit-blame-dimmed)
-                 (show-message . t)))
-
-  (defun my/magit-git-review ()
-    "Run `git review -y` in the current Magit repository."
-    (interactive)
-    (let ((default-directory (magit-toplevel)))
-      (magit-run-git "review" "-y")))
-
-  (transient-append-suffix 'magit-push [1 -1]
-    `("g"
-      ,(concat "Push via " (propertize "git-review" 'face 'bold))
-      my/magit-git-review))
-
-  (defun my/magit-git-review (&optional args)
-    "Push using git-review with optional ARGS."
-    (interactive)
-    (magit-run-git "review" args))
-
-  (transient-define-prefix my/magit-git-review-transient ()
-    "Git Review Commands"
-    ["Git Review"
-     ;; Switch: always passes --yes by default
-     ("-y" "Allow submitting more than one patch" "--yes")
-     ;; Execute git-review
-     ("R" "Push via git-review" my/magit-git-review)])
-
-  (with-eval-after-load 'magit
-    (define-key magit-mode-map (kbd "R") 'my/magit-git-review-transient)))
+                 (show-message . t))))
 
 ;; declare transient separately to get an up-to-date version
 (use-package transient
@@ -613,6 +587,8 @@
 
 (use-package apheleia
   :ensure t
+  :init
+  (apheleia-global-mode)
   :config
   ;; support match-case
   (setf (alist-get 'black apheleia-formatters)
@@ -811,6 +787,7 @@
   :init
   (global-hl-todo-mode))
 
+;; `M-q' now toggles!
 (use-package unfill
   :ensure t
   :bind
@@ -832,3 +809,8 @@
                  '((svelte-mode svelte-ts-mode) . ("svelteserver" "--stdio")))))
 
 (global-unset-key (kbd "s-t"))
+
+(use-package jinx
+  :ensure t
+  :bind
+  ("M-$" . jinx-correct))
