@@ -188,13 +188,17 @@
   (dired-mode . dired-omit-mode)
   :custom
   (dired-auto-revert-buffer t)
-  (dired-dwim-target t))
+  (dired-dwim-target t)
+  (dired-listing-switches "-alFh"))
 
 ;; Add highlighting to dired buffers
 (use-package diredfl
   :ensure t
   :init
   (diredfl-global-mode))
+
+(use-package dired-filter
+  :ensure t)
 
 (use-package esup
   :ensure t
@@ -290,12 +294,6 @@
 
 (use-package doom-themes
   :ensure t)
-
-;; (use-package modus-themes
-;;   :ensure t)
-
-;; (use-package ef-themes
-;;   :ensure t)
 
 (use-package doric-themes
   :ensure t)
