@@ -48,27 +48,12 @@
 (use-package gcmh
   :ensure t
   :config
-  (gcmh-mode 1)
-  :custom
-  (gcmh-verbose t))
+  (gcmh-mode 1))
 
 (elpaca-process-queues)
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (add-hook 'after-init-hook (lambda () (load custom-file)))
-
-;; FIXME: Can we use 'use-package''s ':custom-face' field
-;; together with 'modus-themes-with-colors'?
-(defun disciple/modus-themes-custom-set-faces (&rest _)
-  (modus-themes-with-colors
-    (custom-set-faces
-     '(region ((t :extend nil))))
-    (custom-set-faces
-     `(secondary-selection
-       ((t
-         :background ,bg-red-nuanced
-         :foreground unspecified
-         :extend nil))))))
 
 (defun disciple/show-trailing-whitespace-if-writable ()
   "Enable highlighting of trailing whitespace"
@@ -110,25 +95,8 @@
     (setq treesit--install-language-grammar-out-dir-history (list treesit-path))
     (setq treesit-extra-load-path (list treesit-path)))
 
-  (add-hook 'modus-themes-after-load-theme-hook
-            #'disciple/modus-themes-custom-set-faces)
-
-  (require-theme 'modus-themes)
-
-  (defun disciple/apply-appearance-theme (appearance)
-    "Load theme, taking current system APPEARANCE into consideration."
-    ;; (interactive "S")
-    (mapc #'disable-theme custom-enabled-themes)
-    (pcase appearance
-      ('light (modus-themes-load-theme 'modus-operandi))
-      ('dark (modus-themes-load-theme 'modus-vivendi))))
-
-  (add-hook 'ns-system-appearance-change-functions #'disciple/apply-appearance-theme)
-
   (add-hook 'prog-mode-hook #'disciple/show-trailing-whitespace-if-writable)
   (add-hook 'text-mode-hook #'disciple/show-trailing-whitespace-if-writable)
-
-  (modus-themes-load-theme 'modus-operandi)
 
   :custom
   ;; the graphical frame need not be a multiple of character width/height
@@ -153,14 +121,49 @@
 
   (sentence-end-double-space nil)
 
-  (modus-themes-common-palette-overrides '((fg-region unspecified)))
-
-  (modus-themes-bold-constructs nil)
-  (modus-themes-italic-constructs nil)
-
   (mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil)))
   (mouse-wheel-progressive-speed nil)
   (scroll-conservatively 101))
+
+;; FIXME: Can we use 'use-package''s ':custom-face' field
+;; together with 'modus-themes-with-colors'?
+(defun disciple/modus-themes-custom-set-faces (&rest _)
+  (modus-themes-with-colors
+    (custom-set-faces
+     '(region ((t :extend nil)))
+     `(secondary-selection
+       ((t
+         :background ,bg-red-nuanced
+         :foreground unspecified
+         :extend nil))))
+    (face-spec-reset-face 'highlight)))
+
+(use-package modus-themes
+  :ensure t
+  :config
+  (modus-themes-load-theme 'modus-operandi)
+
+  (add-hook 'modus-themes-after-load-theme-hook
+            #'disciple/modus-themes-custom-set-faces)
+
+  (defun disciple/apply-appearance-theme (appearance)
+    "Load theme, taking current system APPEARANCE into consideration."
+    ;; (interactive "S")
+    (mapc #'disable-theme custom-enabled-themes)
+    (pcase appearance
+      ('light (modus-themes-load-theme 'modus-operandi))
+      ('dark (modus-themes-load-theme 'modus-vivendi))))
+
+  (add-hook 'ns-system-appearance-change-functions #'disciple/apply-appearance-theme)
+  :custom
+  (modus-themes-common-palette-overrides
+   '((fg-region unspecified)
+     (bg-mode-line-active bg-blue-intense)
+     (fg-mode-line-active fg-main)
+     (border-mode-line-active blue-intense)))
+
+  (modus-themes-bold-constructs t)
+  (modus-themes-italic-constructs nil))
 
 (use-package fontaine
   :ensure t
