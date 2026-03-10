@@ -172,7 +172,7 @@
       :default-family "ZetBrains Mono"
       :default-height 180
       :default-weight light
-      :bold-weight semibold)
+      :bold-weight medium)
      (sf
       :default-family "SF Mono"
       :default-height 180
@@ -180,8 +180,7 @@
       :bold-weight semibold)
      (iosevka
       :default-family "Iosevka Custom"
-      :default-height 180
-      :bold-weight semibold))))
+      :default-height 180))))
 
 (use-package dired
   :ensure nil
