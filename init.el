@@ -324,8 +324,10 @@
   (:map corfu-map ("SPC" . corfu-insert-separator))
   :init
   (global-corfu-mode)
+  (corfu-popupinfo-mode)
   :custom
-  (tab-always-indent 'complete))
+  (tab-always-indent 'complete)
+  (corfu-popupinfo-delay '(0.8 . 0.3)))
 
 (use-package eldoc-box
   :ensure t
