@@ -524,7 +524,6 @@
 
 (use-package org-agenda
   :ensure nil
-  :after org
   :bind
   ("C-c a" . org-agenda)
   :config
