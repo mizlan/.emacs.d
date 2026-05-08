@@ -617,8 +617,7 @@
   :ensure t)
 
 (use-package typst-preview
-  :ensure ( :host github
-            :repo "havarddj/typst-preview.el"))
+  :ensure t)
 
 (use-package typst-ts-mode
   :ensure t
