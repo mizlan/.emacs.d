@@ -127,6 +127,9 @@
   (mouse-wheel-progressive-speed nil)
   (scroll-conservatively 101))
 
+(use-package compat
+  :ensure t)
+
 ;; FIXME: Can we use 'use-package''s ':custom-face' field
 ;; together with 'modus-themes-with-colors'?
 (defun disciple/modus-themes-custom-set-faces (&rest _)
