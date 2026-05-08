@@ -295,11 +295,6 @@
   (completion-styles '(orderless basic partial-completion))
   (completion-category-overrides '((file (styles basic partial-completion)))))
 
-(use-package everforest-theme
-  :ensure (everforest
-           :host github
-           :repo "Theory-of-Everything/everforest-emacs"))
-
 (use-package doom-themes
   :ensure t)
 
