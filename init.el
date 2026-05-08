@@ -109,6 +109,8 @@
 
   (confirm-kill-emacs #'y-or-n-p)
 
+  (save-interprogram-paste-before-kill t)
+
   (ring-bell-function 'ignore)
   (search-whitespace-regexp ".*?")
   (show-paren-delay 0)
